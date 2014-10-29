@@ -9,7 +9,7 @@ public class Base_Choice : MonoBehaviour {
         get { return _ChoiceMade; }
     }
 
-    void Reset ()
+    public void Reset ()
     {
         _ChoiceMade = false;
     }
