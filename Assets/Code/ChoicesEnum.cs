@@ -1,7 +1,7 @@
 ﻿
 public enum Choice
 {
-    Rock,
+    Rock = 0,
     Paper,
     Scissors,
     Count

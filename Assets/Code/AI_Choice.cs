@@ -13,6 +13,7 @@ public class AI_Choice : Base_Choice
     // Update is called once per frame
     protected override void Update () 
     {
+        _ChoiceMade = true;
         base.Update();
     }
 
