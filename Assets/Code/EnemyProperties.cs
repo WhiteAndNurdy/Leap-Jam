@@ -8,8 +8,11 @@ public class EnemyProperties : MonoBehaviour {
 	public float HealthPoints;
 	public bool Shield;
 	public float DamageAmount;
+	public float ReassignTargetRate = 0.2f;
+
 	private AIPath m_AIPath;
 	private GameObject m_Tower;
+	private float m_ElapsedTimeTargetRate = 0.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +24,12 @@ public class EnemyProperties : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		m_ElapsedTimeTargetRate += Time.deltaTime;
+		if (m_ElapsedTimeTargetRate >= ReassignTargetRate)
+		{
+			m_ElapsedTimeTargetRate -= ReassignTargetRate;
+			m_AIPath.target = GetClosestTarget();
+		}
 	}
 
 	Transform GetClosestTarget()
@@ -30,7 +38,6 @@ public class EnemyProperties : MonoBehaviour {
 		Vector3 shortestDistance = m_Tower.transform.position - gameObject.transform.position;
 		foreach(Transform child in m_Tower.transform)
 		{
-			Debug.Log("Checking children");
 			Vector3 tempDistance;
 			tempDistance = child.position - gameObject.transform.position;
 			if (tempDistance.sqrMagnitude < shortestDistance.sqrMagnitude)
