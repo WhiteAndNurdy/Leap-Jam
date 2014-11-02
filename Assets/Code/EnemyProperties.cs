@@ -36,13 +36,13 @@ public class EnemyProperties : MonoBehaviour {
 	{
 		Transform returnValue = m_Tower.transform;
 		Vector3 shortestDistance = m_Tower.transform.position - gameObject.transform.position;
-		foreach(Transform child in m_Tower.transform)
+		foreach(GameObject target in GameObject.FindGameObjectsWithTag("Agent_Targets"))
 		{
 			Vector3 tempDistance;
-			tempDistance = child.position - gameObject.transform.position;
+			tempDistance = target.transform.position - gameObject.transform.position;
 			if (tempDistance.sqrMagnitude < shortestDistance.sqrMagnitude)
 			{
-				returnValue = child.transform;
+				returnValue = target.transform.transform;
 				shortestDistance = tempDistance;
 			}
 		}
