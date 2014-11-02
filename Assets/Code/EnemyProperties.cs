@@ -29,6 +29,8 @@ public class EnemyProperties : MonoBehaviour {
 		{
 			VulnerableToUnique.Add(element);
 		}
+		// dereference array that should not be used.
+		VulnerableTo = null;
 	}
 	
 	// Update is called once per frame

@@ -8,7 +8,7 @@ public class AttackTrigger : MonoBehaviour {
 		GameObject Enemy = other.transform.gameObject;
 		if (Enemy.CompareTag("Enemy"))
 		{
-			Enemy.GetComponent<EnemyAttackScript>().Attack();
+			Enemy.GetComponent<EnemyLogic>().Attack();
 		}
 	}
 }

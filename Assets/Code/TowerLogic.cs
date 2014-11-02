@@ -13,7 +13,7 @@ public class TowerLogic : MonoBehaviour {
 	
 	}
 
-	public void Damage(float amount)
+	public void Damage( float amount )
 	{
 		GetComponentInChildren<HealthBarScript>().TakeDamage(amount);
 	}

@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(EnemyProperties))]
-public class EnemyAttackScript : MonoBehaviour {
+public class EnemyLogic : MonoBehaviour {
 
 	private bool m_Attacking;
 	private EnemyProperties m_EnemyProperties;
@@ -10,14 +10,16 @@ public class EnemyAttackScript : MonoBehaviour {
 	private GameObject m_Tower;
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
 		m_EnemyProperties = GetComponent<EnemyProperties>();
 		m_Tower = GameObject.FindGameObjectWithTag("Tower");
 		DebugUtils.Assert(m_Tower != null, "Tower object not found!");
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 		if (m_Attacking)
 		{
 			m_ElapsedTimeSinceAttack += Time.deltaTime;
@@ -34,8 +36,14 @@ public class EnemyAttackScript : MonoBehaviour {
 		m_Attacking = true;
 	}
 
+	public void Damage( float amount )
+	{
+		GetComponentInChildren<HealthBarScript>().TakeDamage(amount);
+	}
+
 	void DoAttack()
 	{
 		m_Tower.GetComponent<TowerLogic>().Damage(m_EnemyProperties.DamageAmount);
 	}
+
 }
