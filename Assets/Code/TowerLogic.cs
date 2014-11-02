@@ -1,20 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TowerLogic : MonoBehaviour {
+public class TowerLogic : EntityLogic
+{
 
 	// Use this for initialization
-	void Start () {
-	
+	protected override void Start () 
+	{
+		base.Start();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	protected override void Update()
+	{
+		base.Update();
 	}
 
-	public void Damage( float amount )
+	public override void Damage(float amount)
 	{
-		GetComponentInChildren<HealthBarScript>().TakeDamage(amount);
+		base.Damage(amount);
+	}
+
+	public override void Die()
+	{
+		base.Die();
+		Debug.Log("Tower Died!");
 	}
 }

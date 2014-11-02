@@ -41,5 +41,9 @@ public class HealthBarScript : MonoBehaviour
 	public void TakeDamage(float damage)
 	{
 		health -= damage;
+		if (health <= 0)
+		{
+			transform.parent.GetComponent<EntityLogic>().Die();
+		}
 	}
 }
