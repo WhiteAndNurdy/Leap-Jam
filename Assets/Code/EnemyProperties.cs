@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Pathfinding;
 
 [RequireComponent(typeof(AIPath))]
@@ -10,10 +11,13 @@ public class EnemyProperties : MonoBehaviour {
 	public float DamageAmount;
 	public float ReassignTargetRate = 0.2f;
 	public float TimeBetweenAttacks;
+	public Elements[] VulnerableTo;
 
 	private AIPath m_AIPath;
 	private GameObject m_Tower;
 	private float m_ElapsedTimeTargetRate = 0.0f;
+	private HashSet<Elements> VulnerableToUnique = new HashSet<Elements>();
+
 
 	// Use this for initialization
 	void Start () {
@@ -21,6 +25,10 @@ public class EnemyProperties : MonoBehaviour {
 		DebugUtils.Assert(m_Tower != null, "No object with tag \"Tower\" was found");
 		m_AIPath = gameObject.GetComponent<AIPath>();
 		m_AIPath.target = GetClosestTarget();
+		foreach (Elements element in VulnerableTo)
+		{
+			VulnerableToUnique.Add(element);
+		}
 	}
 	
 	// Update is called once per frame
