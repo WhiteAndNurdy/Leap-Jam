@@ -39,6 +39,8 @@ public class EnemyLogic : EntityLogic
 		m_Attacking = true;
 	}
 
+	// make sure we only call Damage when we are using the correct type of damage..
+	// see also : VulnerableTo
 	public override void Damage(float amount)
 	{
 		base.Damage(amount);
