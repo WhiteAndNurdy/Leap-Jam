@@ -3,10 +3,10 @@ using System.Collections;
 
 public class HealthBarScript : MonoBehaviour 
 {
-	public float maxHealth = 100;
 	public Texture2D texture;
-	
-	private float health = 100;
+
+	private float maxHealth;
+	private float health;
 	private Vector2 screenPos;
 	private float height = 6;
 	private float width = 30;
@@ -14,6 +14,7 @@ public class HealthBarScript : MonoBehaviour
 	void Start () 
 	{
 		renderer.material = Resources.Load("Materials/Healthbar") as Material;
+		maxHealth = transform.parent.GetComponent<EntityProperties>().HealthPoints;
 		health = maxHealth;
 	}
 	

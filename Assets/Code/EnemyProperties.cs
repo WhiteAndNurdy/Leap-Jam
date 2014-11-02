@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using Pathfinding;
 
 [RequireComponent(typeof(AIPath))]
-public class EnemyProperties : MonoBehaviour {
+public class EnemyProperties : EntityProperties {
 
-	public float HealthPoints;
 	public bool Shield;
 	public float DamageAmount;
 	public float ReassignTargetRate = 0.2f;
@@ -20,7 +19,8 @@ public class EnemyProperties : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
+		base.Start();
 		m_Tower = GameObject.FindGameObjectWithTag("Tower");
 		DebugUtils.Assert(m_Tower != null, "No object with tag \"Tower\" was found");
 		m_AIPath = gameObject.GetComponent<AIPath>();
@@ -34,7 +34,8 @@ public class EnemyProperties : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
+		base.Update();
 		m_ElapsedTimeTargetRate += Time.deltaTime;
 		if (m_ElapsedTimeTargetRate >= ReassignTargetRate)
 		{
