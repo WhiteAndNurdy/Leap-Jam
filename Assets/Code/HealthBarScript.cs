@@ -4,8 +4,9 @@ using System.Collections;
 public class HealthBarScript : MonoBehaviour 
 {
 	public float maxHealth = 100;
-	public float health = 100;
 	public Texture2D texture;
+	
+	private float health = 100;
 	private Vector2 screenPos;
 	private float height = 6;
 	private float width = 30;
@@ -13,6 +14,7 @@ public class HealthBarScript : MonoBehaviour
 	void Start () 
 	{
 		renderer.material = Resources.Load("Materials/Healthbar") as Material;
+		health = maxHealth;
 	}
 	
 	void Update () 
@@ -36,7 +38,7 @@ public class HealthBarScript : MonoBehaviour
 		Graphics.DrawTexture(rect, texture, renderer.material);
 	}
 
-	void TakeDamage(int damage)
+	public void TakeDamage(float damage)
 	{
 		health -= damage;
 	}

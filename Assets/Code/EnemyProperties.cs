@@ -9,6 +9,7 @@ public class EnemyProperties : MonoBehaviour {
 	public bool Shield;
 	public float DamageAmount;
 	public float ReassignTargetRate = 0.2f;
+	public float TimeBetweenAttacks;
 
 	private AIPath m_AIPath;
 	private GameObject m_Tower;
