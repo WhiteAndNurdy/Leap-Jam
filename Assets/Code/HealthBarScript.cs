@@ -4,6 +4,7 @@ using System.Collections;
 public class HealthBarScript : MonoBehaviour 
 {
 	public Texture2D texture;
+	public float AlphaCutoffEpsilon = 0.01f;
 
 	private float maxHealth;
 	private float health;
@@ -26,9 +27,9 @@ public class HealthBarScript : MonoBehaviour
 		screenPos = Camera.main.WorldToScreenPoint(transform.position);
 
 		float healthCutoff = 1.0f - (health / maxHealth);
-		if (healthCutoff < 0.01f)
+		if (healthCutoff < AlphaCutoffEpsilon)
 		{
-			healthCutoff = 0.01f;
+			healthCutoff = AlphaCutoffEpsilon;
 		}
 		renderer.material.SetFloat("_Cutoff", healthCutoff);
 	}
