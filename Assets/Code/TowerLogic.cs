@@ -16,11 +16,6 @@ public class TowerLogic : EntityLogic
 		base.Update();
 	}
 
-	public override void Damage(float amount)
-	{
-		base.Damage(amount);
-	}
-
 	public override void Die()
 	{
 		base.Die();

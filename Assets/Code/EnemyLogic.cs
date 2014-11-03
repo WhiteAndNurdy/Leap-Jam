@@ -9,6 +9,7 @@ public class EnemyLogic : EntityLogic
 	private EnemyProperties m_EnemyProperties;
 	private float m_ElapsedTimeSinceAttack;
 	private GameObject m_Tower;
+	private GameObject m_Shield;
 
 	// Use this for initialization
 	protected override void Start()
@@ -17,6 +18,8 @@ public class EnemyLogic : EntityLogic
 		m_EnemyProperties = GetComponent<EnemyProperties>();
 		m_Tower = GameObject.FindGameObjectWithTag("Tower");
 		DebugUtils.Assert(m_Tower != null, "Tower object not found!");
+		m_Shield = transform.FindChild("Shield").gameObject;
+		DebugUtils.Assert(m_Shield != null, "Shield child not found!");
 	}
 
 	// Update is called once per frame
@@ -39,11 +42,16 @@ public class EnemyLogic : EntityLogic
 		m_Attacking = true;
 	}
 
-	// make sure we only call Damage when we are using the correct type of damage..
-	// see also : VulnerableTo
-	public override void Damage(float amount)
-	{
-		base.Damage(amount);
+	public void Damage(float amount, Elements type)
+	{		
+		if (m_Shield.activeSelf)
+		{
+			m_Shield.GetComponent<ShieldLogic>().Damage(type);
+		}
+		else if (m_EnemyProperties.IsVulnerableTo(type))
+		{
+			Damage(amount);
+		}
 	}
 
 	public override void Die()

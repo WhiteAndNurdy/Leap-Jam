@@ -11,10 +11,7 @@ public class SpellDamage : MonoBehaviour {
 	{
 		if (other.tag == "Enemy")
 		{
-			if (other.gameObject.GetComponent<EnemyProperties>().IsVulnerableTo(SpellType))
-			{
-				other.gameObject.GetComponent<EnemyLogic>().Damage(DamageAmount);
-			}
+			other.gameObject.GetComponent<EnemyLogic>().Damage(DamageAmount, SpellType);
 		}
 	}
 

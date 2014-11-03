@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AttackTrigger : MonoBehaviour {
+public class EnemyAttackTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
