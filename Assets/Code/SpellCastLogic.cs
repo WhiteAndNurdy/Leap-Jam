@@ -6,6 +6,8 @@ public class SpellCastLogic : MonoBehaviour {
 	public LayerMask RayCastLayerMask;
 	public float RayCastRange = 100.0f;
 
+	public GameObject[] SpellPrefabs = new GameObject[(int)Elements.Count];
+
 	private GameObject m_AimIndicator;
 	// Use this for initialization
 	void Start () 
@@ -20,6 +22,12 @@ public class SpellCastLogic : MonoBehaviour {
 		if (IsAiming())
 		{
 			Aim();
+			// count is invalid.. 
+			Elements CastingType = GetCastingType();
+			if (CastingType != Elements.Count)
+			{
+				CastSpell(CastingType);
+			}
 		}
 		else
 		{
@@ -46,5 +54,31 @@ public class SpellCastLogic : MonoBehaviour {
 	bool IsAiming()
 	{
 		return Input.GetKey(KeyCode.A);
+	}
+
+	Elements GetCastingType()
+	{
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			return Elements.Water;
+		}
+		else if (Input.GetKeyDown(KeyCode.W))
+		{
+			return Elements.Fire;
+		}
+		else if (Input.GetKeyDown(KeyCode.E))
+		{
+			return Elements.Earth;
+		}
+		else if (Input.GetKeyDown(KeyCode.R))
+		{
+			return Elements.Air;
+		}
+		return Elements.Count;
+	}
+
+	void CastSpell(Elements element)
+	{
+		Instantiate(SpellPrefabs[(int)element], m_AimIndicator.transform.position, Quaternion.identity);
 	}
 }

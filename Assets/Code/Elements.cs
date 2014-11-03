@@ -1,7 +1,8 @@
 ﻿public enum Elements
 {
-	Fire,
+	Fire = 0,
 	Water,
 	Earth,
-	Air
+	Air,
+	Count
 }
