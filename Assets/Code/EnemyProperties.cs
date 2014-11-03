@@ -10,7 +10,7 @@ public class EnemyProperties : EntityProperties {
 	public float DamageAmount;
 	public float ReassignTargetRate = 0.2f;
 	public float TimeBetweenAttacks;
-	public Elements[] VulnerableTo;
+	public Elements[] VulnerableTo = new Elements[1];
 
 	private AIPath m_AIPath;
 	private GameObject m_Tower;
@@ -59,5 +59,10 @@ public class EnemyProperties : EntityProperties {
 			}
 		}
 		return returnValue;
+	}
+
+	public bool IsVulnerableTo(Elements type)
+	{
+		return VulnerableToUnique.Contains(type);
 	}
 }
