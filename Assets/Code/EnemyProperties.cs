@@ -31,16 +31,20 @@ public class EnemyProperties : EntityProperties {
 		}
 		// dereference array that should not be used.
 		VulnerableTo = null;
+		StartCoroutine("UpdateAIPath");
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-		m_ElapsedTimeTargetRate += Time.deltaTime;
-		if (m_ElapsedTimeTargetRate >= ReassignTargetRate)
+	}
+
+	IEnumerable UpdateAIPath()
+	{
+		while (true)
 		{
-			m_ElapsedTimeTargetRate -= ReassignTargetRate;
 			m_AIPath.target = GetClosestTarget();
+			yield return new WaitForSeconds(ReassignTargetRate);
 		}
 	}
 

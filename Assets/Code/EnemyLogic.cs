@@ -29,7 +29,6 @@ public class EnemyLogic : EntityLogic
 	{
 		while (true)
 		{
-			Debug.Log("Attacking!");
 			DoAttack();
 			yield return new WaitForSeconds(m_EnemyProperties.TimeBetweenAttacks);
 		}
