@@ -57,7 +57,7 @@ public class EnemyLogic : EntityLogic
 	public override void Die()
 	{
 		base.Die();
-		Debug.Log("Enemy Died!");
+		GameObject.Destroy(gameObject);
 	}
 
 	void DoAttack()
