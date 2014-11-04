@@ -4,10 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(EnemyProperties))]
 public class EnemyLogic : EntityLogic
 {
-
-	private bool m_Attacking;
 	private EnemyProperties m_EnemyProperties;
-	private float m_ElapsedTimeSinceAttack;
 	private GameObject m_Tower;
 	private GameObject m_Shield;
 
@@ -26,24 +23,25 @@ public class EnemyLogic : EntityLogic
 	protected override void Update()
 	{
 		base.Update();
-		if (m_Attacking)
+	}
+
+	IEnumerator CheckForAttack()
+	{
+		while (true)
 		{
-			m_ElapsedTimeSinceAttack += Time.deltaTime;
-			if (m_ElapsedTimeSinceAttack >= m_EnemyProperties.TimeBetweenAttacks)
-			{
-				m_ElapsedTimeSinceAttack -= m_EnemyProperties.TimeBetweenAttacks;
-				DoAttack();
-			}
+			Debug.Log("Attacking!");
+			DoAttack();
+			yield return new WaitForSeconds(m_EnemyProperties.TimeBetweenAttacks);
 		}
 	}
 
 	public void Attack()
 	{
-		m_Attacking = true;
+		StartCoroutine("CheckForAttack");
 	}
 
 	public void Damage(float amount, Elements type)
-	{		
+	{
 		if (m_Shield.activeSelf)
 		{
 			m_Shield.GetComponent<ShieldLogic>().Damage(type);
