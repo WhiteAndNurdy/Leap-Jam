@@ -18,7 +18,7 @@ public class Wave : MonoBehaviour
 {
     public List<Group> groups;
 
-    public Wave(GameObject parent)
+    public Wave()
     {
         groups = new List<Group>();
     }
