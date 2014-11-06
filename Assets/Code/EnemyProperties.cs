@@ -14,7 +14,6 @@ public class EnemyProperties : EntityProperties {
 
 	private AIPath m_AIPath;
 	private GameObject m_Tower;
-	private float m_ElapsedTimeTargetRate = 0.0f;
 	private HashSet<Elements> VulnerableToUnique = new HashSet<Elements>();
 
 
@@ -39,7 +38,7 @@ public class EnemyProperties : EntityProperties {
 		base.Update();
 	}
 
-	IEnumerable UpdateAIPath()
+	IEnumerator UpdateAIPath()
 	{
 		while (true)
 		{
