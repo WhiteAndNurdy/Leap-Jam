@@ -12,7 +12,7 @@ public class SpellCastLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		m_AimIndicator = transform.Find("AimIndicator").gameObject;
+		m_AimIndicator = GameObject.FindGameObjectWithTag("AimIndicator");
 		DebugUtils.Assert(m_AimIndicator != null, "Couldn't find child AimIndicator");
 	}
 	
