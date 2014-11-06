@@ -96,30 +96,30 @@ public class SpellCastLogic : MonoBehaviour {
 					if (hand.IsValid && InverseControls ? hand.IsLeft : hand.IsRight)
 					{
 						DebugUtils.Log("Valid hand found", DebugFireGesture);
-						Finger middleFinger = null;
-						Finger ringFinger = null;
+						Finger indexFinger = null;
+						Finger pinkieFinger = null;
 						foreach (Finger finger in hand.Fingers)
 						{
-							if (finger.Type() == Finger.FingerType.TYPE_RING)
+							if (finger.Type() == Finger.FingerType.TYPE_PINKY)
 							{
-								ringFinger = finger;
-								DebugUtils.Log("Ringfinger detected", DebugFireGesture);
+								pinkieFinger = finger;
+								DebugUtils.Log("pinkieFinger detected", DebugFireGesture);
 							}
-							else if (finger.Type() == Finger.FingerType.TYPE_MIDDLE)
+							else if (finger.Type() == Finger.FingerType.TYPE_INDEX)
 							{
-								middleFinger = finger;
-								DebugUtils.Log("Middlefinger detected", DebugFireGesture);
+								indexFinger = finger;
+								DebugUtils.Log("indexFinger detected", DebugFireGesture);
 							}
-							if (ringFinger != null && middleFinger != null)
+							if (pinkieFinger != null && indexFinger != null)
 							{
 								break;
 							}
 						}
-						if (!ringFinger.IsExtended && middleFinger.IsExtended)
+						if (!pinkieFinger.IsExtended && indexFinger.IsExtended)
 						{
-							DebugUtils.Log("ringFinger not extended, middleFinger extended", DebugFireGesture);
-							float distance = Vector3.Dot(ringFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity(),
-													middleFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity());
+							DebugUtils.Log("pinkieFinger not extended, indexFinger extended", DebugFireGesture);
+							float distance = Vector3.Dot(pinkieFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity(),
+													indexFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity());
 							if (distance < DotDirectionMiddleAndRingFinger)
 							{
 								DebugUtils.Log("Gesture complete!", DebugFireGesture);
