@@ -11,26 +11,20 @@ public class SpellCastLogic : MonoBehaviour {
 	public bool InverseControls = false;
 	public bool InverseAimDirection = false;
 
+	public bool DebugFireGesture;
+	public float DotDirectionMiddleAndRingFinger = -0.8f;
+
 	protected const float GIZMO_SCALE = 5.0f;
 
 	GameObject m_AimIndicator;
 	Controller m_LeapController;
 	SpellCastLogic m_SpellCastLogic;
 	bool m_Aiming = false;
-
-	void OnDrawGizmos()
-	{
-		// Draws the little Leap Motion Controller in the Editor view.
-		Gizmos.matrix = Matrix4x4.Scale(GIZMO_SCALE * Vector3.one);
-		Gizmos.DrawIcon(transform.position, "leap_motion.png");
-	}
+	Elements m_PreviousCastingType = Elements.Count;
 
 	void Awake()
 	{
 		m_LeapController = new Controller();
-		Controller.PolicyFlag policy_flags = m_LeapController.PolicyFlags;
-		policy_flags &= ~Controller.PolicyFlag.POLICY_OPTIMIZE_HMD;
-		m_LeapController.SetPolicyFlags(policy_flags);
 		m_SpellCastLogic = gameObject.GetComponent<SpellCastLogic>();
 		m_AimIndicator = GameObject.FindGameObjectWithTag("AimIndicator");
 		
@@ -53,6 +47,11 @@ public class SpellCastLogic : MonoBehaviour {
 		DebugUtils.Assert(m_SpellCastLogic != null, "Unable to find SpellCastLogic component!");
 		DebugUtils.Assert(m_AimIndicator != null, "Couldn't find object with tag AimIndicator");
 		StartCoroutine("DetectAim");
+		StartCoroutine("CheckHandPresence");
+		StartCoroutine("DetectFire");
+		/*StartCoroutine("DetectAir");
+		StartCoroutine("DetectEarth");
+		StartCoroutine("DetectWater");*/
 	}
 
 	IEnumerator DetectAim()
@@ -73,11 +72,76 @@ public class SpellCastLogic : MonoBehaviour {
 			m_Aiming = false;
 		}
 	}
+
+	IEnumerator CheckHandPresence()
+	{
+		while (true)
+		{
+			if (m_LeapController.Frame().Hands.Count == 1 && m_LeapController.Frame().Hands[0].IsLeft)
+			{
+				m_PreviousCastingType = Elements.Count;
+			}
+			yield return new WaitForSeconds(0.1f);
+		}
+	}
+
+	IEnumerator DetectFire()
+	{
+		while (true)
+		{
+			if (m_Aiming)
+			{
+				foreach (Hand hand in m_LeapController.Frame().Hands)
+				{
+					if (hand.IsValid && InverseControls ? hand.IsLeft : hand.IsRight)
+					{
+						DebugUtils.Log("Valid hand found", DebugFireGesture);
+						Finger middleFinger = null;
+						Finger ringFinger = null;
+						foreach (Finger finger in hand.Fingers)
+						{
+							if (finger.Type() == Finger.FingerType.TYPE_RING)
+							{
+								ringFinger = finger;
+								DebugUtils.Log("Ringfinger detected", DebugFireGesture);
+							}
+							else if (finger.Type() == Finger.FingerType.TYPE_MIDDLE)
+							{
+								middleFinger = finger;
+								DebugUtils.Log("Middlefinger detected", DebugFireGesture);
+							}
+							if (ringFinger != null && middleFinger != null)
+							{
+								break;
+							}
+						}
+						if (!ringFinger.IsExtended && middleFinger.IsExtended)
+						{
+							DebugUtils.Log("ringFinger not extended, middleFinger extended", DebugFireGesture);
+							float distance = Vector3.Dot(ringFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity(),
+													middleFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity());
+							if (distance < DotDirectionMiddleAndRingFinger)
+							{
+								DebugUtils.Log("Gesture complete!", DebugFireGesture);
+								CastSpell(Elements.Fire);
+							}
+						}
+						else
+						{
+							m_PreviousCastingType = Elements.Count;
+						}
+					}
+				}
+			}
+			yield return new WaitForSeconds(0.1f);
+		}
+	}
 	
 	Vector3 LeapVectorToUnity(Leap.Vector leapVector)
 	{
 		return Vector3.Scale(leapVector.ToUnityScaled(), transform.localScale) + transform.position;
 	}
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -136,6 +200,10 @@ public class SpellCastLogic : MonoBehaviour {
 
 	void CastSpell(Elements element)
 	{
-		Instantiate(SpellPrefabs[(int)element], m_AimIndicator.transform.position, Quaternion.identity);
+		if (m_PreviousCastingType != element)
+		{
+			Instantiate(SpellPrefabs[(int)element], m_AimIndicator.transform.position, Quaternion.identity);
+			m_PreviousCastingType = element;
+		}
 	}
 }

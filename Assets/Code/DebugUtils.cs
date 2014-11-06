@@ -13,4 +13,12 @@ public class DebugUtils
 		}
 #endif 
 	} 
+
+	static public void Log(string message, bool shouldLog = true)
+	{
+		if (shouldLog)
+		{
+			Debug.Log(message);
+		}
+	}
 }
