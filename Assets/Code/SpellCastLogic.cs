@@ -66,10 +66,11 @@ public class SpellCastLogic : MonoBehaviour {
 					m_Aiming = true;
 					// aim hand detected! 
 					Debug.Log("Aiming");
-					Aim(hand.PalmPosition.ToUnity());
+					Aim(Vector3.Scale(hand.PalmPosition.ToUnityScaled(), transform.localScale), hand.PalmNormal.ToUnity());
 				}
 			}
 			yield return new WaitForSeconds(0.1f);
+			m_Aiming = false;
 		}
 	}
 	
@@ -91,18 +92,12 @@ public class SpellCastLogic : MonoBehaviour {
 		}
 	}
 
-	void Aim(Vector3 palmPosition)
+	void Aim(Vector3 palmPosition, Vector3 palmNormal)
 	{
 		Ray ray;
 		RaycastHit hit;
-		Vector3 screenPos = Camera.main.WorldToScreenPoint(palmPosition);
-		if (!InverseAimDirection)
-		{
-			screenPos.x = UnityEngine.Screen.width - screenPos.x;
-			screenPos.y = UnityEngine.Screen.height - screenPos.y;
-		}
-		Debug.Log(screenPos);
-		ray = Camera.main.ScreenPointToRay(screenPos);
+		Debug.Log("PalmPosition = " + palmPosition + " PalmNormal = " + Camera.main.transform.forward);
+		ray = new Ray(palmPosition, Camera.main.transform.forward);
 		if (Physics.Raycast(ray, out hit, RayCastRange, RayCastLayerMask))
 		{
 			if (hit.collider.name == "FloorPlane")
