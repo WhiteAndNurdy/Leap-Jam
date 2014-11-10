@@ -18,6 +18,9 @@ public class SpellCastLogic : MonoBehaviour
 	public bool DebugAirGesture;
 	public float AirPalmDotValue = 0.6f;
 
+	public bool DebugWaterGesture;
+	public float WaterPalmDotValue = 0.6f;
+
 
 	protected const float GIZMO_SCALE = 5.0f;
 
@@ -171,6 +174,25 @@ public class SpellCastLogic : MonoBehaviour
 
 	bool DetectWater(Hand hand)
 	{
+		bool fingersExtended = true;
+		foreach (Finger finger in hand.Fingers)
+		{
+			if (!finger.IsExtended)
+			{
+				fingersExtended = false;
+				break;
+			}
+		}
+		if (fingersExtended)
+		{
+			DebugUtils.Log("All Fingers extended", DebugWaterGesture);
+			if (hand.PalmNormal.Dot(Vector.Down) > WaterPalmDotValue)
+			{
+				DebugUtils.Log("Water gesture Complete", DebugWaterGesture);
+				SetSpell(Elements.Water);
+				return true;
+			}
+		}
 		return false;
 	}
 
