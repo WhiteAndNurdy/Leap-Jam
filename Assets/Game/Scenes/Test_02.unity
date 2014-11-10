@@ -6996,8 +6996,6 @@ MonoBehaviour:
   - {fileID: 100000, guid: 7c95444e840861a4e98e4acef3b37a8b, type: 2}
   InverseControls: 0
   InverseAimDirection: 0
-  MaximumSpellScale: 1
-  MinimumSpellScale: .5
   DebugFireGesture: 0
   FireFingerDotValue: -.800000012
   DebugAirGesture: 0

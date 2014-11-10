@@ -4,6 +4,8 @@ using System.Collections;
 public class SpellLogic : MonoBehaviour {
 
 	public float TEMP__LifeTime = 1.0f;
+	public float MinimumScale;
+
 	// Use this for initialization
 	void Start () {
 		GameObject.Destroy(gameObject, TEMP__LifeTime);

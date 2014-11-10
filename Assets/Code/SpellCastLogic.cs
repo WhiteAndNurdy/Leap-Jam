@@ -12,8 +12,6 @@ public class SpellCastLogic : MonoBehaviour
 	public GameObject[] SpellPrefabs = new GameObject[(int)Elements.Count];
 	public bool InverseControls = false;
 	public bool InverseAimDirection = false;
-	public float MaximumSpellScale = 1.0f;
-	public float MinimumSpellScale = 0.2f;
 
 	public bool DebugFireGesture;
 	public float FireFingerDotValue = -0.8f;
@@ -290,14 +288,16 @@ public class SpellCastLogic : MonoBehaviour
 		if (element != Elements.Count && m_PreviousCastingType != element)
 		{
 			GameObject spellPrefab = Instantiate(SpellPrefabs[(int)element], m_AimIndicator.transform.position, Quaternion.identity) as GameObject;
-			spellPrefab.transform.localScale = Vector3.Scale(spellPrefab.transform.localScale, GetAimScale());
+			spellPrefab.transform.localScale = Vector3.Scale(spellPrefab.transform.localScale, GetAimScale(spellPrefab));
 			m_PreviousCastingType = element;
 		}
 	}
 
-	Vector3 GetAimScale()
+	Vector3 GetAimScale(GameObject spellPrefab)
 	{
-		float convertedScale = (m_AimScale * (MaximumSpellScale - MinimumSpellScale)) + MinimumSpellScale;
+		SpellLogic logic = spellPrefab.GetComponent<SpellLogic>();
+		DebugUtils.Assert(logic != null, "Spell Logic component not found in prefab");
+		float convertedScale = (m_AimScale * (1 - logic.MinimumScale)) + logic.MinimumScale;
 		return new Vector3(convertedScale, convertedScale, convertedScale);
 	}
 }
