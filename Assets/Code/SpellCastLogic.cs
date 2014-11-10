@@ -21,6 +21,9 @@ public class SpellCastLogic : MonoBehaviour
 	public bool DebugWaterGesture;
 	public float WaterPalmDotValue = 0.6f;
 
+	public bool DebugEarthGesture;
+	public float EarthGrabValue = 0.6f;
+
 
 	protected const float GIZMO_SCALE = 5.0f;
 
@@ -198,6 +201,12 @@ public class SpellCastLogic : MonoBehaviour
 
 	bool DetectEarth(Hand hand)
 	{
+		if(hand.GrabStrength > EarthGrabValue)
+		{
+			DebugUtils.Log("Earth gesture Complete", DebugEarthGesture);
+			SetSpell(Elements.Earth);
+			return true;
+		}
 		return false;
 	}
 
