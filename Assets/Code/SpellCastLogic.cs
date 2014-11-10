@@ -12,6 +12,8 @@ public class SpellCastLogic : MonoBehaviour
 	public GameObject[] SpellPrefabs = new GameObject[(int)Elements.Count];
 	public bool InverseControls = false;
 	public bool InverseAimDirection = false;
+	public float MaximumSpellScale = 1.0f;
+	public float MinimumSpellScale = 0.2f;
 
 	public bool DebugFireGesture;
 	public float FireFingerDotValue = -0.8f;
@@ -36,6 +38,7 @@ public class SpellCastLogic : MonoBehaviour
 	Elements m_CurrentCastingType = Elements.Count;
 	Elements m_PreviousCastingType = Elements.Count;
 	Vector m_WaterGestureStartPosition;
+	float m_AimScale = 1.0f;
 	
 
 	void Awake()
@@ -63,10 +66,10 @@ public class SpellCastLogic : MonoBehaviour
 		StartCoroutine("CheckHandPresence");
 	}
 
-	void SetAim(Vector palmPosition)
+	void SetAim(Hand hand)
 	{
 		m_Aiming = true;
-		Aim(LeapVectorToUnity(palmPosition));
+		Aim(LeapVectorToUnity(hand.PalmPosition));
 	}
 
 	void ResetSpells()
@@ -89,7 +92,8 @@ public class SpellCastLogic : MonoBehaviour
 			{
 				if (hand.IsValid && InverseControls ? hand.IsRight : hand.IsLeft)
 				{
-					SetAim(hand.PalmPosition);
+					m_AimScale = 1 - hand.GrabStrength;
+					SetAim(hand);
 				}
 				else if (hand.IsValid && InverseControls ? hand.IsLeft : hand.IsRight)
 				{
@@ -285,8 +289,15 @@ public class SpellCastLogic : MonoBehaviour
 	{
 		if (element != Elements.Count && m_PreviousCastingType != element)
 		{
-			Instantiate(SpellPrefabs[(int)element], m_AimIndicator.transform.position, Quaternion.identity);
+			GameObject spellPrefab = Instantiate(SpellPrefabs[(int)element], m_AimIndicator.transform.position, Quaternion.identity) as GameObject;
+			spellPrefab.transform.localScale = Vector3.Scale(spellPrefab.transform.localScale, GetAimScale());
 			m_PreviousCastingType = element;
 		}
+	}
+
+	Vector3 GetAimScale()
+	{
+		float convertedScale = (m_AimScale * (MaximumSpellScale - MinimumSpellScale)) + MinimumSpellScale;
+		return new Vector3(convertedScale, convertedScale, convertedScale);
 	}
 }
