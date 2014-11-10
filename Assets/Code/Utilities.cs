@@ -8,13 +8,14 @@ using UnityEngine;
 
 public static class Utilities
 {
-    public static LevelFromXml LoadLevelFile(string levelName)
+    public static LevelFromXML LoadLevelFile(string levelName)
     {
-        LevelFromXml level = new LevelFromXml();
-        
-        TextAsset text = Resources.Load(levelName) as TextAsset;
+        LevelFromXML level = new LevelFromXML();
+        string levelFilePath = "Levels/" + levelName;
+
+        TextAsset text = Resources.Load(levelFilePath) as TextAsset;
         XDocument xdoc = XDocument.Parse(text.text);
-        
+
         XElement mainElement = xdoc.Element(levelName);
         
         //Read stuff in
@@ -27,21 +28,23 @@ public static class Utilities
             foreach(var group in groups)
             {
                 var groupToAdd = new Group();
-                var enemies = group.Elements("Enemies");
+                var enemies = group.Elements("Enemy");
     
                 foreach(var enemy in enemies)
                 {
-                    groupToAdd.enemies.Add(new Enemy());
-                    //enemy.Attribute("X"),
-                      //                                int.Parse(enemy.Attribute("Health").Value),
-                        //                              bool.Parse(enemy.Attribute("Shield").Value)));
+                    string type = enemy.Attribute("type").Value;
+                    int health = int.Parse(enemy.Attribute("health").Value);
+                    bool hasShield = bool.Parse(enemy.Attribute("hasShield").Value);
+
+                    var enemyDataToAdd = new EnemyData(type, health, hasShield);
+
+                    groupToAdd.enemies.Add(enemyDataToAdd);
+                    
                 }
                 waveToAdd.groups.Add(groupToAdd);
             }
-    
             level.waves.Add(waveToAdd);
         }
-
         return level;
     }
 }
