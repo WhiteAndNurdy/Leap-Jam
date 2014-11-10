@@ -12,7 +12,11 @@ public class SpellCastLogic : MonoBehaviour {
 	public bool InverseAimDirection = false;
 
 	public bool DebugFireGesture;
-	public float DotDirectionMiddleAndRingFinger = -0.8f;
+	public float FireFingerDotValue = -0.8f;
+
+	public bool DebugAirGesture;
+	public float AirPalmDotValue = 0.6f;
+
 
 	protected const float GIZMO_SCALE = 5.0f;
 
@@ -20,6 +24,7 @@ public class SpellCastLogic : MonoBehaviour {
 	Controller m_LeapController;
 	SpellCastLogic m_SpellCastLogic;
 	bool m_Aiming = false;
+	Elements m_CurrentCastingType = Elements.Count;
 	Elements m_PreviousCastingType = Elements.Count;
 
 	void Awake()
@@ -33,7 +38,6 @@ public class SpellCastLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		Debug.Log("SanityTest");
 		if (m_LeapController == null)
 		{
 			Debug.LogWarning(
@@ -46,95 +50,132 @@ public class SpellCastLogic : MonoBehaviour {
 		}
 		DebugUtils.Assert(m_SpellCastLogic != null, "Unable to find SpellCastLogic component!");
 		DebugUtils.Assert(m_AimIndicator != null, "Couldn't find object with tag AimIndicator");
-		StartCoroutine("DetectAim");
 		StartCoroutine("CheckHandPresence");
-		StartCoroutine("DetectFire");
-		/*StartCoroutine("DetectAir");
-		StartCoroutine("DetectEarth");
-		StartCoroutine("DetectWater");*/
 	}
 
-	IEnumerator DetectAim()
+	void SetAim(Vector palmPosition)
 	{
-		while (true)
-		{
-			foreach (Hand hand in m_LeapController.Frame().Hands)
-			{
-				if (hand.IsValid && InverseControls ? hand.IsRight : hand.IsLeft)
-				{
-					m_Aiming = true;
-					// aim hand detected! 
-					Debug.Log("Aiming");
-					Aim(LeapVectorToUnity(hand.PalmPosition));
-				}
-			}
-			yield return new WaitForSeconds(0.1f);
-			m_Aiming = false;
-		}
+		m_Aiming = true;
+		Aim(LeapVectorToUnity(palmPosition));
+	}
+
+	void ResetSpells()
+	{
+		SetSpell(Elements.Count);
+		m_PreviousCastingType = Elements.Count;
 	}
 
 	IEnumerator CheckHandPresence()
 	{
 		while (true)
 		{
+			m_Aiming = false;
 			if (m_LeapController.Frame().Hands.Count == 1 && m_LeapController.Frame().Hands[0].IsLeft)
 			{
-				m_PreviousCastingType = Elements.Count;
+				// second hand not found, reset spells
+				ResetSpells();
 			}
-			yield return new WaitForSeconds(0.1f);
-		}
-	}
-
-	IEnumerator DetectFire()
-	{
-		while (true)
-		{
-			if (m_Aiming)
+			foreach (Hand hand in m_LeapController.Frame().Hands)
 			{
-				foreach (Hand hand in m_LeapController.Frame().Hands)
+				if (hand.IsValid && InverseControls ? hand.IsRight : hand.IsLeft)
 				{
-					if (hand.IsValid && InverseControls ? hand.IsLeft : hand.IsRight)
+					SetAim(hand.PalmPosition);
+				}
+				else if (hand.IsValid && InverseControls ? hand.IsLeft : hand.IsRight)
+				{
+					bool gestureFound = false;
+					gestureFound = DetectFire(hand);
+					if (!gestureFound)
 					{
-						DebugUtils.Log("Valid hand found", DebugFireGesture);
-						Finger indexFinger = null;
-						Finger pinkieFinger = null;
-						foreach (Finger finger in hand.Fingers)
-						{
-							if (finger.Type() == Finger.FingerType.TYPE_PINKY)
-							{
-								pinkieFinger = finger;
-								DebugUtils.Log("pinkieFinger detected", DebugFireGesture);
-							}
-							else if (finger.Type() == Finger.FingerType.TYPE_INDEX)
-							{
-								indexFinger = finger;
-								DebugUtils.Log("indexFinger detected", DebugFireGesture);
-							}
-							if (pinkieFinger != null && indexFinger != null)
-							{
-								break;
-							}
-						}
-						if (!pinkieFinger.IsExtended && indexFinger.IsExtended)
-						{
-							DebugUtils.Log("pinkieFinger not extended, indexFinger extended", DebugFireGesture);
-							float distance = Vector3.Dot(pinkieFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity(),
-													indexFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity());
-							if (distance < DotDirectionMiddleAndRingFinger)
-							{
-								DebugUtils.Log("Gesture complete!", DebugFireGesture);
-								CastSpell(Elements.Fire);
-							}
-						}
-						else
-						{
-							m_PreviousCastingType = Elements.Count;
-						}
+						gestureFound = DetectAir(hand);
+					}
+					if (!gestureFound)
+					{
+						gestureFound = DetectWater(hand);
+					}
+					if (!gestureFound)
+					{
+						gestureFound = DetectEarth(hand);
+					}
+					if (!gestureFound)
+					{
+						ResetSpells();
 					}
 				}
 			}
 			yield return new WaitForSeconds(0.1f);
 		}
+	}
+
+	bool DetectFire(Hand hand)
+	{
+			DebugUtils.Log("Valid hand found", DebugFireGesture);
+			Finger indexFinger = null;
+			Finger pinkieFinger = null;
+			foreach (Finger finger in hand.Fingers)
+			{
+				if (finger.Type() == Finger.FingerType.TYPE_PINKY)
+				{
+					pinkieFinger = finger;
+					DebugUtils.Log("pinkieFinger detected", DebugFireGesture);
+				}
+				else if (finger.Type() == Finger.FingerType.TYPE_INDEX)
+				{
+					indexFinger = finger;
+					DebugUtils.Log("indexFinger detected", DebugFireGesture);
+				}
+				if (pinkieFinger != null && indexFinger != null)
+				{
+					break;
+				}
+			}
+			if (!pinkieFinger.IsExtended && indexFinger.IsExtended)
+			{
+				DebugUtils.Log("pinkieFinger not extended, indexFinger extended", DebugFireGesture);
+				float distance = Vector3.Dot(pinkieFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity(),
+										indexFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity());
+				if (distance < FireFingerDotValue)
+				{
+					DebugUtils.Log("Fire gesture complete!", DebugFireGesture);
+					SetSpell(Elements.Fire);
+					return true;
+				}
+			}
+			return false;
+	}
+
+	bool DetectAir(Hand hand)
+	{
+		bool fingersExtended = true;
+		foreach (Finger finger in hand.Fingers)
+		{
+			if (!finger.IsExtended)
+			{
+				fingersExtended = false;
+				break;
+			}
+		}
+		if (fingersExtended)
+		{
+			DebugUtils.Log("All Fingers extended", DebugAirGesture);
+			if (hand.PalmNormal.Dot(Vector.Forward) > AirPalmDotValue)
+			{
+				DebugUtils.Log("Air gesture Complete", DebugAirGesture);
+				SetSpell(Elements.Air);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool DetectWater(Hand hand)
+	{
+		return false;
+	}
+
+	bool DetectEarth(Hand hand)
+	{
+		return false;
 	}
 	
 	Vector3 LeapVectorToUnity(Leap.Vector leapVector)
@@ -179,28 +220,18 @@ public class SpellCastLogic : MonoBehaviour {
 
 	Elements GetCastingType()
 	{
-		if (Input.GetKeyDown(KeyCode.Q))
-		{
-			return Elements.Water;
-		}
-		else if (Input.GetKeyDown(KeyCode.W))
-		{
-			return Elements.Fire;
-		}
-		else if (Input.GetKeyDown(KeyCode.E))
-		{
-			return Elements.Earth;
-		}
-		else if (Input.GetKeyDown(KeyCode.R))
-		{
-			return Elements.Air;
-		}
-		return Elements.Count;
+		return m_CurrentCastingType;
+	}
+
+	void SetSpell(Elements element)
+	{
+		if(m_PreviousCastingType != element)
+			m_CurrentCastingType = element;
 	}
 
 	void CastSpell(Elements element)
 	{
-		if (m_PreviousCastingType != element)
+		if (element != Elements.Count && m_PreviousCastingType != element)
 		{
 			Instantiate(SpellPrefabs[(int)element], m_AimIndicator.transform.position, Quaternion.identity);
 			m_PreviousCastingType = element;
