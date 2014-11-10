@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using Leap;
 
@@ -20,6 +21,7 @@ public class SpellCastLogic : MonoBehaviour
 
 	public bool DebugWaterGesture;
 	public float WaterPalmDotValue = 0.6f;
+	public float WaterMmDistanceChange = 100.0f;
 
 	public bool DebugEarthGesture;
 	public float EarthGrabValue = 0.6f;
@@ -33,13 +35,14 @@ public class SpellCastLogic : MonoBehaviour
 	bool m_Aiming = false;
 	Elements m_CurrentCastingType = Elements.Count;
 	Elements m_PreviousCastingType = Elements.Count;
+	Vector m_WaterGestureStartPosition;
+	
 
 	void Awake()
 	{
 		m_LeapController = new Controller();
 		m_SpellCastLogic = gameObject.GetComponent<SpellCastLogic>();
 		m_AimIndicator = GameObject.FindGameObjectWithTag("AimIndicator");
-
 	}
 
 	// Use this for initialization
@@ -191,11 +194,28 @@ public class SpellCastLogic : MonoBehaviour
 			DebugUtils.Log("All Fingers extended", DebugWaterGesture);
 			if (hand.PalmNormal.Dot(Vector.Down) > WaterPalmDotValue)
 			{
-				DebugUtils.Log("Water gesture Complete", DebugWaterGesture);
-				SetSpell(Elements.Water);
-				return true;
+				DebugUtils.Log("Hand facing downwards", DebugWaterGesture);
+				if (m_WaterGestureStartPosition != null)
+				{
+					Vector linearHandMovement = hand.PalmPosition - m_WaterGestureStartPosition;
+					//Check if x - movement has changed since the gesture was detected.
+					if (Math.Abs(linearHandMovement.x) > WaterMmDistanceChange)
+					{
+						DebugUtils.Log("Water gesture Complete", DebugWaterGesture);
+						SetSpell(Elements.Water);
+						return true;
+					}
+				}
+				else
+				{
+					m_WaterGestureStartPosition = hand.PalmPosition;
+					return false;
+				}
+				
 			}
 		}
+		// Set the x position to an invalid number
+		m_WaterGestureStartPosition = null;
 		return false;
 	}
 

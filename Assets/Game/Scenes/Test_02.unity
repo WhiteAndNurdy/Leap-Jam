@@ -7000,9 +7000,10 @@ MonoBehaviour:
   FireFingerDotValue: -.800000012
   DebugAirGesture: 0
   AirPalmDotValue: .600000024
-  DebugWaterGesture: 0
+  DebugWaterGesture: 1
   WaterPalmDotValue: .600000024
-  DebugEarthGesture: 1
+  WaterMmDistanceChange: 20
+  DebugEarthGesture: 0
   EarthGrabValue: .600000024
 --- !u!4 &1850215451
 Transform:
