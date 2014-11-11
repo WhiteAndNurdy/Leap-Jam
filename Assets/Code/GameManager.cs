@@ -39,10 +39,12 @@ public class GameManager : MonoBehaviour
         foreach (var wave in levelFromXML.waves)
         {
             GameObject waveObj = Instantiate(wavePrefab) as GameObject;
+            waveObj.tag = "Wave";
 
             foreach (var group in wave.groups)
             {
                 GameObject groupObj = Instantiate(groupPrefab) as GameObject;
+                groupObj.tag = "Group";
                 
                 foreach (var enemy in group.enemies)
                 {
@@ -66,7 +68,16 @@ public class GameManager : MonoBehaviour
         var spawners = GameObject.FindGameObjectsWithTag("Spawner");
         var currentWave = waves[currentWaveIndex];
 
-        foreach (var group in currentWave.GetComponentsInChildren<Transform>())
+        List<GameObject> groups = new List<GameObject>();
+        foreach (Transform child in currentWave.GetComponentsInChildren<Transform>())
+        {
+            if (child.tag == "Group")
+            {
+                groups.Add(child.gameObject);
+            }
+        }
+
+        foreach (var group in groups)
         {           
             foreach(var spawner in spawners)
             {
