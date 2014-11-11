@@ -7397,11 +7397,13 @@ MonoBehaviour:
   FireFingerDotValue: -.800000012
   DebugAirGesture: 0
   AirPalmDotValue: .600000024
-  DebugWaterGesture: 1
+  DebugWaterGesture: 0
   WaterPalmDotValue: .600000024
-  WaterMmDistanceChange: 20
-  DebugEarthGesture: 0
+  WaterMmDistanceChange: 50
+  DebugEarthGesture: 1
   EarthGrabValue: .600000024
+  EarthPalmDotValue: .600000024
+  EarthMmDistanceChange: 50
 --- !u!1 &2055293434
 GameObject:
   m_ObjectHideFlags: 0

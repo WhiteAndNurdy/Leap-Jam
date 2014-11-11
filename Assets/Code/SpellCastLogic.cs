@@ -25,6 +25,8 @@ public class SpellCastLogic : MonoBehaviour
 
 	public bool DebugEarthGesture;
 	public float EarthGrabValue = 0.6f;
+	public float EarthPalmDotValue = 0.6f;
+	public float EarthMmDistanceChange = 50.0f;
 
 
 	protected const float GIZMO_SCALE = 5.0f;
@@ -35,8 +37,10 @@ public class SpellCastLogic : MonoBehaviour
 	bool m_Aiming = false;
 	Elements m_CurrentCastingType = Elements.Count;
 	Elements m_PreviousCastingType = Elements.Count;
-	Vector m_WaterGestureStartPosition;
 	float m_AimScale = 1.0f;
+
+	Vector m_WaterGestureStartPosition;
+	Vector m_EarthGestureStartPosition;
 	
 
 	void Awake()
@@ -207,6 +211,10 @@ public class SpellCastLogic : MonoBehaviour
 						SetSpell(Elements.Water);
 						return true;
 					}
+					else
+					{
+						return false;
+					}
 				}
 				else
 				{
@@ -223,12 +231,38 @@ public class SpellCastLogic : MonoBehaviour
 
 	bool DetectEarth(Hand hand)
 	{
-		if(hand.GrabStrength > EarthGrabValue)
+		if (hand.GrabStrength > EarthGrabValue && hand.PalmNormal.Dot(Vector.Down) > EarthPalmDotValue)
 		{
-			DebugUtils.Log("Earth gesture Complete", DebugEarthGesture);
-			SetSpell(Elements.Earth);
-			return true;
+			DebugUtils.Log("Hand Grabbing and facing down", DebugEarthGesture);
+			if (m_EarthGestureStartPosition != null)
+			{
+				Vector linearHandMovement = m_EarthGestureStartPosition - hand.PalmPosition;
+				DebugUtils.Log("Linear hand movement: " + linearHandMovement);
+				//Check if x - movement has changed since the gesture was detected.
+				if (linearHandMovement.y > EarthMmDistanceChange)
+				{
+					DebugUtils.Log("Earth gesture Complete", DebugEarthGesture);
+					SetSpell(Elements.Earth);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				m_EarthGestureStartPosition = hand.PalmPosition;
+				DebugUtils.Log("Setting Gesture Start Position to: " + m_EarthGestureStartPosition);
+				return false;
+			}
 		}
+		else
+		{
+			return false;
+		}
+		DebugUtils.Log("Gesture not detected...");
+		m_EarthGestureStartPosition = null;
 		return false;
 	}
 
