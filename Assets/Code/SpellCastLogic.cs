@@ -14,7 +14,8 @@ public class SpellCastLogic : MonoBehaviour
 	public bool InverseAimDirection = false;
 
 	public bool DebugFireGesture;
-	public float FireFingerDotValue = -0.8f;
+	public float FirePalmDotValue = 0.8f;
+	public float FireMmDistanceChange = 50.0f;
 
 	public bool DebugAirGesture;
 	public float AirPalmDotValue = 0.6f;
@@ -40,6 +41,7 @@ public class SpellCastLogic : MonoBehaviour
 	Elements m_PreviousCastingType = Elements.Count;
 	float m_AimScale = 1.0f;
 
+	Vector m_FireGestureStartPosition;
 	Vector m_AirGestureStartPosition;
 	Vector m_WaterGestureStartPosition;
 	Vector m_EarthGestureStartPosition;
@@ -127,38 +129,31 @@ public class SpellCastLogic : MonoBehaviour
 
 	bool DetectFire(Hand hand)
 	{
-		DebugUtils.Log("Valid hand found", DebugFireGesture);
-		Finger indexFinger = null;
-		Finger pinkieFinger = null;
-		foreach (Finger finger in hand.Fingers)
+		if (hand.PalmNormal.Dot(Vector.Up) > FirePalmDotValue)
 		{
-			if (finger.Type() == Finger.FingerType.TYPE_PINKY)
+			DebugUtils.Log("Hand facing upwards", DebugFireGesture);
+			if (m_FireGestureStartPosition != null)
 			{
-				pinkieFinger = finger;
-				DebugUtils.Log("pinkieFinger detected", DebugFireGesture);
+				Vector linearHandMovement = hand.PalmPosition - m_FireGestureStartPosition;
+				//Check if y - movement has changed since the gesture was detected.
+				if (linearHandMovement.y > FireMmDistanceChange)
+				{
+					DebugUtils.Log("Fire gesture Complete", DebugFireGesture);
+					SetSpell(Elements.Fire);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
-			else if (finger.Type() == Finger.FingerType.TYPE_INDEX)
+			else
 			{
-				indexFinger = finger;
-				DebugUtils.Log("indexFinger detected", DebugFireGesture);
-			}
-			if (pinkieFinger != null && indexFinger != null)
-			{
-				break;
+				m_FireGestureStartPosition = hand.PalmPosition;
+				return false;
 			}
 		}
-		if (!pinkieFinger.IsExtended && indexFinger.IsExtended)
-		{
-			DebugUtils.Log("pinkieFinger not extended, indexFinger extended", DebugFireGesture);
-			float distance = Vector3.Dot(pinkieFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity(),
-									indexFinger.Bone(Leap.Bone.BoneType.TYPE_DISTAL).Direction.ToUnity());
-			if (distance < FireFingerDotValue)
-			{
-				DebugUtils.Log("Fire gesture complete!", DebugFireGesture);
-				SetSpell(Elements.Fire);
-				return true;
-			}
-		}
+		m_FireGestureStartPosition = null;
 		return false;
 	}
 
@@ -241,7 +236,6 @@ public class SpellCastLogic : MonoBehaviour
 				
 			}
 		}
-		// Set the x position to an invalid number
 		m_WaterGestureStartPosition = null;
 		return false;
 	}
