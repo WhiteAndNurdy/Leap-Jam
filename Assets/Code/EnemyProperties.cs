@@ -7,6 +7,7 @@ using Pathfinding;
 public class EnemyProperties : EntityProperties {
 
 	public bool Shield;
+    public bool EnemyActive;
 	public float DamageAmount;
 	public float ReassignTargetRate = 0.2f;
 	public float TimeBetweenAttacks;
@@ -40,7 +41,7 @@ public class EnemyProperties : EntityProperties {
 
 	IEnumerator UpdateAIPath()
 	{
-		while (true)
+        while (EnemyActive)
 		{
 			m_AIPath.target = GetClosestTarget();
 			yield return new WaitForSeconds(ReassignTargetRate);

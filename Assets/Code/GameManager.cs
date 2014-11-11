@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
 
         levelFromXML = Utilities.LoadLevelFile("LevelX");
         CreateLevelFromXML();
+
+        AddWaveToSpawners(0);
 	}
 
     private void CreateLevelFromXML() 
@@ -44,10 +46,11 @@ public class GameManager : MonoBehaviour
                 
                 foreach (var enemy in group.enemies)
                 {
-                    GameObject enemyObj = Instantiate(enemyPrefab) as GameObject;
+                    GameObject enemyObj = Instantiate(enemyPrefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                     //enemyObj.GetComponent<EnemyProperties>().type = enemy.type;
                     enemyObj.GetComponent<EnemyProperties>().HealthPoints = enemy.health;
                     enemyObj.GetComponent<EnemyProperties>().Shield = enemy.hasShield;
+                    enemyObj.GetComponent<EnemyProperties>().EnemyActive = false;
 
                     enemyObj.transform.parent = groupObj.transform;
                 }
@@ -57,4 +60,32 @@ public class GameManager : MonoBehaviour
             waves.Add(waveObj);
         }
 	}
+
+    private void AddWaveToSpawners(int currentWaveIndex)
+    {
+        var spawners = GameObject.FindGameObjectsWithTag("Spawner");
+        var currentWave = waves[currentWaveIndex];
+
+        foreach (var group in currentWave.GetComponentsInChildren<Transform>())
+        {           
+            foreach(var spawner in spawners)
+            {
+                if (!spawner.GetComponent<Spawner>().hasGroupAssigned)
+                {
+                    //once an empty spawner is found, no need to look for another one.
+                    List<GameObject> enemies = new List<GameObject>();
+                    foreach(Transform child in group.GetComponentsInChildren<Transform>())
+                    {
+                        if (child.tag == "Enemy")
+                        {
+                            enemies.Add(child.gameObject);
+                        }
+                    }
+
+                    spawner.GetComponent<Spawner>().AssignGroup(enemies);
+                    break;
+                }
+            }
+        }
+    }
 }
