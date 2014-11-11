@@ -18,10 +18,11 @@ public class SpellCastLogic : MonoBehaviour
 
 	public bool DebugAirGesture;
 	public float AirPalmDotValue = 0.6f;
+	public float AirMmDistanceChange = 50.0f;
 
 	public bool DebugWaterGesture;
 	public float WaterPalmDotValue = 0.6f;
-	public float WaterMmDistanceChange = 100.0f;
+	public float WaterMmDistanceChange = 50.0f;
 
 	public bool DebugEarthGesture;
 	public float EarthGrabValue = 0.6f;
@@ -39,6 +40,7 @@ public class SpellCastLogic : MonoBehaviour
 	Elements m_PreviousCastingType = Elements.Count;
 	float m_AimScale = 1.0f;
 
+	Vector m_AirGestureStartPosition;
 	Vector m_WaterGestureStartPosition;
 	Vector m_EarthGestureStartPosition;
 	
@@ -176,11 +178,26 @@ public class SpellCastLogic : MonoBehaviour
 			DebugUtils.Log("All Fingers extended", DebugAirGesture);
 			if (hand.PalmNormal.Dot(Vector.Forward) > AirPalmDotValue)
 			{
-				DebugUtils.Log("Air gesture Complete", DebugAirGesture);
-				SetSpell(Elements.Air);
-				return true;
+				DebugUtils.Log("Hand facing forwards", DebugAirGesture);
+				if (m_AirGestureStartPosition != null)
+				{
+					Vector linearHandMovement = hand.PalmPosition - m_AirGestureStartPosition;
+					//Check if z - movement has changed since the gesture was detected.
+					if (Math.Abs(linearHandMovement.z) > AirMmDistanceChange)
+					{
+						DebugUtils.Log("Air gesture Complete", DebugAirGesture);
+						SetSpell(Elements.Air);
+						return true;
+					}
+				}
+				else
+				{
+					m_AirGestureStartPosition = hand.PalmPosition;
+					return false;
+				}
 			}
 		}
+		m_AirGestureStartPosition = null;
 		return false;
 	}
 
@@ -254,10 +271,6 @@ public class SpellCastLogic : MonoBehaviour
 				m_EarthGestureStartPosition = hand.PalmPosition;
 				return false;
 			}
-		}
-		else
-		{
-			return false;
 		}
 		m_EarthGestureStartPosition = null;
 		return false;
