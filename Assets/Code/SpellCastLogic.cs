@@ -237,7 +237,6 @@ public class SpellCastLogic : MonoBehaviour
 			if (m_EarthGestureStartPosition != null)
 			{
 				Vector linearHandMovement = m_EarthGestureStartPosition - hand.PalmPosition;
-				DebugUtils.Log("Linear hand movement: " + linearHandMovement);
 				//Check if x - movement has changed since the gesture was detected.
 				if (linearHandMovement.y > EarthMmDistanceChange)
 				{
@@ -253,7 +252,6 @@ public class SpellCastLogic : MonoBehaviour
 			else
 			{
 				m_EarthGestureStartPosition = hand.PalmPosition;
-				DebugUtils.Log("Setting Gesture Start Position to: " + m_EarthGestureStartPosition);
 				return false;
 			}
 		}
@@ -261,7 +259,6 @@ public class SpellCastLogic : MonoBehaviour
 		{
 			return false;
 		}
-		DebugUtils.Log("Gesture not detected...");
 		m_EarthGestureStartPosition = null;
 		return false;
 	}
