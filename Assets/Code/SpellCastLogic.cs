@@ -67,6 +67,12 @@ public class SpellCastLogic : MonoBehaviour
 			Debug.LogWarning(
 				"Leapmotion device not connected!");
 		}
+		if (InverseControls)
+		{
+			Vector3 newPosition = gameObject.transform.localPosition;
+			newPosition.x *= -1;
+			gameObject.transform.localPosition = newPosition;
+		}
 		DebugUtils.Assert(m_SpellCastLogic != null, "Unable to find SpellCastLogic component!");
 		DebugUtils.Assert(m_AimIndicator != null, "Couldn't find object with tag AimIndicator");
 		StartCoroutine("CheckHandPresence");

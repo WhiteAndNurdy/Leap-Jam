@@ -1013,7 +1013,7 @@ MonoBehaviour:
   - {fileID: 100000, guid: 7c95444e840861a4e98e4acef3b37a8b, type: 2}
   InverseControls: 0
   InverseAimDirection: 0
-  DebugFireGesture: 1
+  DebugFireGesture: 0
   FirePalmDotValue: .800000012
   FireMmDistanceChange: 50
   DebugAirGesture: 0
