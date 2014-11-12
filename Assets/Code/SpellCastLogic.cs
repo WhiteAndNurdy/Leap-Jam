@@ -72,18 +72,6 @@ public class SpellCastLogic : MonoBehaviour
 		StartCoroutine("CheckHandPresence");
 	}
 
-	void SetAim(Hand hand)
-	{
-		m_Aiming = true;
-		Aim(LeapVectorToUnity(hand.PalmPosition));
-	}
-
-	void ResetSpells()
-	{
-		SetSpell(Elements.Count);
-		m_PreviousCastingType = Elements.Count;
-	}
-
 	IEnumerator CheckHandPresence()
 	{
 		while (true)
@@ -123,8 +111,25 @@ public class SpellCastLogic : MonoBehaviour
 					}
 				}
 			}
-			yield return new WaitForSeconds(0.1f);
+			yield return null;
 		}
+	}
+
+	void SetAim(Hand hand)
+	{
+		m_Aiming = true;
+		Aim(LeapVectorToUnity(hand.PalmPosition));
+	}
+
+	void ResetSpells()
+	{
+		SetSpell(Elements.Count);
+		m_PreviousCastingType = Elements.Count;
+	}
+
+	Vector3 LeapVectorToUnity(Leap.Vector leapVector)
+	{
+		return Vector3.Scale(leapVector.ToUnityScaled(), transform.localScale) + transform.position;
 	}
 
 	bool DetectFire(Hand hand)
@@ -268,11 +273,6 @@ public class SpellCastLogic : MonoBehaviour
 		}
 		m_EarthGestureStartPosition = null;
 		return false;
-	}
-
-	Vector3 LeapVectorToUnity(Leap.Vector leapVector)
-	{
-		return Vector3.Scale(leapVector.ToUnityScaled(), transform.localScale) + transform.position;
 	}
 
 	// Update is called once per frame
