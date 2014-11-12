@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     //File pulled from resources
     private LevelFromXML levelFromXML;
+    private int currentWave = 0;
+    private bool waveEnded = true;
 
 	void Start () 
     {
@@ -31,8 +33,17 @@ public class GameManager : MonoBehaviour
         levelFromXML = Utilities.LoadLevelFile("LevelX");
         CreateLevelFromXML();
 
-        AddWaveToSpawners(0);
+        AddWaveToSpawners(currentWave);
 	}
+
+    void Update()
+    {
+        CheckIfWaveEnded();
+        if (waveEnded)
+        {
+            StartNextWave();
+        }
+    }
 
     private void CreateLevelFromXML() 
     {
@@ -98,5 +109,41 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void CheckIfWaveEnded()
+    {
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        waveEnded = true;
+
+        foreach(var enemy in enemies)
+        {
+            if (enemy.GetComponent<EnemyProperties>().EnemyActive)
+            {
+                waveEnded = false;
+                break;
+            }
+        }
+    }
+
+    private void StartNextWave()
+    {
+        ++currentWave;
+        if (currentWave >= waves.Count)
+        {
+            EndLevel(true);
+            return;
+        }
+        else
+        {
+            AddWaveToSpawners(currentWave);
+        }
+    }
+
+    private void EndLevel(bool hasWon)
+    {
+        //Disable controls
+        //Open victory/defeat screen
+        //Enable quit/continue buttons
     }
 }
