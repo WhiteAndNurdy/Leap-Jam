@@ -169,7 +169,7 @@ public class SpellCastLogic : MonoBehaviour
 	}
 
 	bool DetectAir(Hand hand)
-	{
+	{/*
 		bool fingersExtended = true;
 		foreach (Finger finger in hand.Fingers)
 		{
@@ -181,19 +181,23 @@ public class SpellCastLogic : MonoBehaviour
 		}
 		if (fingersExtended)
 		{
-			DebugUtils.Log("All Fingers extended", DebugAirGesture);
+			DebugUtils.Log("All Fingers extended", DebugAirGesture);*/
 			if (hand.PalmNormal.Dot(Vector.Forward) > AirPalmDotValue)
 			{
 				DebugUtils.Log("Hand facing forwards", DebugAirGesture);
 				if (m_AirGestureStartPosition != null)
 				{
-					Vector linearHandMovement = hand.PalmPosition - m_AirGestureStartPosition;
+					Vector linearHandMovement = m_AirGestureStartPosition - hand.PalmPosition;
 					//Check if z - movement has changed since the gesture was detected.
-					if (Math.Abs(linearHandMovement.z) > AirMmDistanceChange)
+					if (linearHandMovement.z > AirMmDistanceChange)
 					{
 						DebugUtils.Log("Air gesture Complete", DebugAirGesture);
 						SetSpell(Elements.Air);
 						return true;
+					}
+					else
+					{
+						return false;
 					}
 				}
 				else
@@ -202,7 +206,7 @@ public class SpellCastLogic : MonoBehaviour
 					return false;
 				}
 			}
-		}
+		//}
 		m_AirGestureStartPosition = null;
 		return false;
 	}
