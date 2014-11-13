@@ -6,10 +6,10 @@ using System;
 
 public enum GameState
 {
-	Tutorial,
-	Preparation,
-	Waves,
-	GameOver
+    Tutorial,
+    Preparation,
+    Waves,
+    GameOver
 }
 
 public class GameManager : MonoBehaviour 
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private int currentWave = 0;
     private bool waveEnded = true;
 
-	void Start () 
+    void Start () 
     {
         waves = new List<GameObject>();
 
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         CreateLevelFromXML();
 
         AddWaveToSpawners(currentWave);
-	}
+    }
 
     void Update()
     {
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
 
             waves.Add(waveObj);
         }
-	}
+    }
 
     private void AddWaveToSpawners(int currentWaveIndex)
     {

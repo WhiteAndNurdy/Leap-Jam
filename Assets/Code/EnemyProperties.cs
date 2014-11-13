@@ -7,7 +7,16 @@ using Pathfinding;
 public class EnemyProperties : EntityProperties {
 
 	public bool Shield;
-    public bool EnemyActive;
+	public bool EnemyActive
+	{
+		get { return m_EnemyActive; }
+		set
+		{
+			m_EnemyActive = value;
+			gameObject.GetComponent<AIPath>().enabled = value;
+			gameObject.GetComponent<Seeker>().enabled = value;
+		}
+	}
 	public float DamageAmount;
 	public float ReassignTargetRate = 0.2f;
 	public float TimeBetweenAttacks;
@@ -16,14 +25,19 @@ public class EnemyProperties : EntityProperties {
 	private AIPath m_AIPath;
 	private GameObject m_Tower;
 	private HashSet<Elements> VulnerableToUnique = new HashSet<Elements>();
+	private bool m_EnemyActive;
 
+	void Awake()
+	{
+		m_Tower = GameObject.FindGameObjectWithTag("Tower");
+		m_AIPath = gameObject.GetComponent<AIPath>();
+	}
 
 	// Use this for initialization
-	protected override void Start () {
+	protected override void Start() 
+	{
 		base.Start();
-		m_Tower = GameObject.FindGameObjectWithTag("Tower");
 		DebugUtils.Assert(m_Tower != null, "No object with tag \"Tower\" was found");
-		m_AIPath = gameObject.GetComponent<AIPath>();
 		m_AIPath.target = GetClosestTarget();
 		foreach (Elements element in VulnerableTo)
 		{
@@ -31,17 +45,13 @@ public class EnemyProperties : EntityProperties {
 		}
 		// dereference array that should not be used.
 		VulnerableTo = null;
+		// force the ai components to the correct state.
 		StartCoroutine("UpdateAIPath");
 	}
 	
-	// Update is called once per frame
-	protected override void Update () {
-		base.Update();
-	}
-
 	IEnumerator UpdateAIPath()
 	{
-        while (EnemyActive)
+		while (EnemyActive)
 		{
 			m_AIPath.target = GetClosestTarget();
 			yield return new WaitForSeconds(ReassignTargetRate);
