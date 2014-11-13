@@ -41,6 +41,11 @@ public class EnemyPool
 		get {return List.Count - ActiveIndex;} 
 	}
 
+	public int TotalCount
+	{
+		get { return List.Count; }
+	}
+
 	public GameObject At(int i)
 	{
 		if (List.Count <= i)
@@ -48,6 +53,16 @@ public class EnemyPool
 			Grow();
 		}
 		return List[i];
+	}
+
+	public GameObject GetFirstPooled()
+	{
+		foreach (GameObject item in List)
+		{
+			if (!item.activeSelf)
+				return item;
+		}
+		return null;
 	}
 
 	void Grow()
@@ -62,16 +77,10 @@ public class EnemyPool
 
 	public GameObject RemoveItemFromPool()
 	{
-		foreach (GameObject item in List)
-		{
-			if (!item.activeSelf)
-			{
-				item.SetActive(true);
-				ActiveIndex++;
-				return item;
-			}
-		}
-		return null;
+		GameObject item = GetFirstPooled();
+		item.SetActive(true);
+		ActiveIndex++;
+		return item;
 	}
 
 	public void AddItemToPool(GameObject item)
@@ -124,13 +133,19 @@ public class EnemyPoolProperties : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		GameObject container = new GameObject();
+		container.name = "Unclaimed Pooled Objects";
 		foreach (var enemy in EnemyPoolEntries)
 		{
 			m_EnemyPoolMap.Add(enemy.Name, new EnemyPool(enemy.Count));
+			GameObject subContainer = new GameObject();
+			subContainer.name = enemy.Name + " Container";
+			subContainer.transform.parent = container.transform;
 			for(int i = 0; i < enemy.Count; ++i)
 			{
 				GameObject newObject = Instantiate(enemy.EnemyPrefab) as GameObject;
 				newObject.name = enemy.Name;
+				newObject.transform.parent = subContainer.transform;
 				m_EnemyPoolMap[enemy.Name].Add(newObject);
 			}
 		}
@@ -161,6 +176,9 @@ public class EnemyPoolProperties : MonoBehaviour {
 
 	public void RemoveEnemy(GameObject enemy)
 	{
+		if (m_EnemyPoolMap[enemy.name].TotalCount > 0)
+			enemy.transform.parent = m_EnemyPoolMap[enemy.name].GetFirstPooled().transform.parent;
+
 		m_EnemyPoolMap[enemy.name].AddItemToPool(enemy);
 	}
 }

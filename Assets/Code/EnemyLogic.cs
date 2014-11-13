@@ -57,7 +57,7 @@ public class EnemyLogic : EntityLogic
 	public override void Die()
 	{
 		base.Die();
-		GameObject.Destroy(gameObject);
+		EnemyPoolProperties.instance.RemoveEnemy(gameObject);
 	}
 
 	void DoAttack()

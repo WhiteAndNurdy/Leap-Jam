@@ -9,7 +9,7 @@
 				<Enemy type = "water_small" health = "150" hasShield = "false"/>
 			</Group>
 			<Group>
-				<Enemy type = "wind_small" health = "70" hasShield = "false"/>
+				<Enemy type = "air_small" health = "70" hasShield = "false"/>
 			</Group>
 			<Group>
 				<Enemy type = "earth_small" health = "200" hasShield = "false"/>

@@ -6,144 +6,144 @@ using System;
 
 public enum GameState
 {
-    Tutorial,
-    Preparation,
-    Waves,
-    GameOver
+	Tutorial,
+	Preparation,
+	Waves,
+	GameOver
 }
 
 public class GameManager : MonoBehaviour 
 {
-    public GameState currentGameState;
+	public GameState currentGameState;
 
-    public List<GameObject> waves;
-    public GameObject wavePrefab;
-    public GameObject groupPrefab;
-    public GameObject enemyPrefab;
+	public List<GameObject> waves;
+	public GameObject wavePrefab;
+	public GameObject groupPrefab;
+	public GameObject enemyPrefab;
 
-    //File pulled from resources
-    private LevelFromXML levelFromXML;
-    private int currentWave = 0;
-    private bool waveEnded = true;
+	//File pulled from resources
+	private LevelFromXML levelFromXML;
+	private int currentWave = 0;
+	private bool waveEnded = true;
 
-    void Start () 
-    {
-        waves = new List<GameObject>();
+	void Start () 
+	{
+		waves = new List<GameObject>();
 
-        levelFromXML = Utilities.LoadLevelFile("LevelX");
-        CreateLevelFromXML();
+		levelFromXML = Utilities.LoadLevelFile("LevelX");
+		CreateLevelFromXML();
 
-        AddWaveToSpawners(currentWave);
-    }
+		AddWaveToSpawners(currentWave);
+	}
 
-    void Update()
-    {
-        CheckIfWaveEnded();
-        if (waveEnded)
-        {
-            StartNextWave();
-        }
-    }
+	void Update()
+	{
+		CheckIfWaveEnded();
+		if (waveEnded)
+		{
+			StartNextWave();
+		}
+	}
 
-    private void CreateLevelFromXML() 
-    {
-        foreach (var wave in levelFromXML.waves)
-        {
-            GameObject waveObj = Instantiate(wavePrefab) as GameObject;
-            waveObj.tag = "Wave";
+	private void CreateLevelFromXML() 
+	{
+		foreach (var wave in levelFromXML.waves)
+		{
+			GameObject waveObj = Instantiate(wavePrefab) as GameObject;
+			waveObj.tag = "Wave";
 
-            foreach (var group in wave.groups)
-            {
-                GameObject groupObj = Instantiate(groupPrefab) as GameObject;
-                groupObj.tag = "Group";
-                
-                foreach (var enemy in group.enemies)
-                {
-                    GameObject enemyObj = Instantiate(enemyPrefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-                    //enemyObj.GetComponent<EnemyProperties>().type = enemy.type;
-                    enemyObj.GetComponent<EnemyProperties>().HealthPoints = enemy.health;
-                    enemyObj.GetComponent<EnemyProperties>().Shield = enemy.hasShield;
-                    enemyObj.GetComponent<EnemyProperties>().EnemyActive = false;
+			foreach (var group in wave.groups)
+			{
+				GameObject groupObj = Instantiate(groupPrefab) as GameObject;
+				groupObj.tag = "Group";
+				
+				foreach (var enemy in group.enemies)
+				{
+					GameObject enemyObj = EnemyPoolProperties.instance.GetEnemyWithName(enemy.type);
+					DebugUtils.Assert(enemyObj != null, "Unknown enemy type: " + enemy.type + " make sure this matches with the pool.");
+					//enemyObj.GetComponent<EnemyProperties>().type = enemy.type;
+					enemyObj.GetComponent<EnemyProperties>().HealthPoints = enemy.health;
+					enemyObj.GetComponent<EnemyProperties>().Shield = enemy.hasShield;
+					enemyObj.GetComponent<EnemyProperties>().EnemyActive = false;
+					enemyObj.transform.parent = groupObj.transform;
+				}
+				groupObj.transform.parent = waveObj.transform;
+			}
 
-                    enemyObj.transform.parent = groupObj.transform;
-                }
-                groupObj.transform.parent = waveObj.transform;
-            }
+			waves.Add(waveObj);
+		}
+	}
 
-            waves.Add(waveObj);
-        }
-    }
+	private void AddWaveToSpawners(int currentWaveIndex)
+	{
+		var spawners = GameObject.FindGameObjectsWithTag("Spawner");
+		var currentWave = waves[currentWaveIndex];
 
-    private void AddWaveToSpawners(int currentWaveIndex)
-    {
-        var spawners = GameObject.FindGameObjectsWithTag("Spawner");
-        var currentWave = waves[currentWaveIndex];
+		List<GameObject> groups = new List<GameObject>();
+		foreach (Transform child in currentWave.GetComponentsInChildren<Transform>())
+		{
+			if (child.tag == "Group")
+			{
+				groups.Add(child.gameObject);
+			}
+		}
 
-        List<GameObject> groups = new List<GameObject>();
-        foreach (Transform child in currentWave.GetComponentsInChildren<Transform>())
-        {
-            if (child.tag == "Group")
-            {
-                groups.Add(child.gameObject);
-            }
-        }
+		foreach (var group in groups)
+		{           
+			foreach(var spawner in spawners)
+			{
+				if (!spawner.GetComponent<Spawner>().hasGroupAssigned)
+				{
+					//once an empty spawner is found, no need to look for another one.
+					List<GameObject> enemies = new List<GameObject>();
+					foreach(Transform child in group.GetComponentsInChildren<Transform>())
+					{
+						if (child.tag == "Enemy")
+						{
+							enemies.Add(child.gameObject);
+						}
+					}
 
-        foreach (var group in groups)
-        {           
-            foreach(var spawner in spawners)
-            {
-                if (!spawner.GetComponent<Spawner>().hasGroupAssigned)
-                {
-                    //once an empty spawner is found, no need to look for another one.
-                    List<GameObject> enemies = new List<GameObject>();
-                    foreach(Transform child in group.GetComponentsInChildren<Transform>())
-                    {
-                        if (child.tag == "Enemy")
-                        {
-                            enemies.Add(child.gameObject);
-                        }
-                    }
+					spawner.GetComponent<Spawner>().AssignGroup(enemies);
+					break;
+				}
+			}
+		}
+	}
 
-                    spawner.GetComponent<Spawner>().AssignGroup(enemies);
-                    break;
-                }
-            }
-        }
-    }
+	private void CheckIfWaveEnded()
+	{
+		var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+		waveEnded = true;
 
-    private void CheckIfWaveEnded()
-    {
-        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        waveEnded = true;
+		foreach(var enemy in enemies)
+		{
+			if (enemy.GetComponent<EnemyProperties>().EnemyActive)
+			{
+				waveEnded = false;
+				break;
+			}
+		}
+	}
 
-        foreach(var enemy in enemies)
-        {
-            if (enemy.GetComponent<EnemyProperties>().EnemyActive)
-            {
-                waveEnded = false;
-                break;
-            }
-        }
-    }
+	private void StartNextWave()
+	{
+		++currentWave;
+		if (currentWave >= waves.Count)
+		{
+			EndLevel(true);
+			return;
+		}
+		else
+		{
+			AddWaveToSpawners(currentWave);
+		}
+	}
 
-    private void StartNextWave()
-    {
-        ++currentWave;
-        if (currentWave >= waves.Count)
-        {
-            EndLevel(true);
-            return;
-        }
-        else
-        {
-            AddWaveToSpawners(currentWave);
-        }
-    }
-
-    private void EndLevel(bool hasWon)
-    {
-        //Disable controls
-        //Open victory/defeat screen
-        //Enable quit/continue buttons
-    }
+	private void EndLevel(bool hasWon)
+	{
+		//Disable controls
+		//Open victory/defeat screen
+		//Enable quit/continue buttons
+	}
 }
