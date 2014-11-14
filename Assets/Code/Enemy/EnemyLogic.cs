@@ -6,11 +6,13 @@ using System.Collections;
 public class EnemyLogic : EntityLogic
 {
 	public float ReassignTargetRate = 0.2f;
+	public bool MovingTowardsTower = true;
 
 	private EnemyProperties m_EnemyProperties;
 	private GameObject m_Tower;
 	private GameObject m_Shield;
 	private AIPath m_AIPath;
+
 
 	void Awake()
 	{
@@ -57,6 +59,26 @@ public class EnemyLogic : EntityLogic
 		return returnValue;
 	}
 
+	IEnumerator MoveInToAttack()
+	{
+		m_AIPath.enabled = false;
+		if (GetComponent<Seeker>() != null)
+		{
+			GetComponent<Seeker>().enabled = false;
+		}
+		while (MovingTowardsTower)
+		{
+			Vector3 dir = m_Tower.transform.position - transform.position;
+			Vector3 movement = dir.normalized * m_AIPath.speed * Time.deltaTime;
+			if (movement.magnitude > dir.magnitude)
+				movement = dir;
+			GetComponent<CharacterController>().Move(movement);
+			yield return null;
+		}
+		StartCoroutine("CheckForAttack");
+		yield return null;
+	}
+
 	IEnumerator CheckForAttack()
 	{
 		while (true)
@@ -68,8 +90,9 @@ public class EnemyLogic : EntityLogic
 
 	public void Attack()
 	{
+		Debug.Log("Reached Attack");
 		StopCoroutine("UpdateAIPath");
-		StartCoroutine("CheckForAttack");
+		StartCoroutine("MoveInToAttack");
 	}
 
 	public void Damage(float amount, Elements type)
