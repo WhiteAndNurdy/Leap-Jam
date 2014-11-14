@@ -45,15 +45,17 @@ public class EnemyProperties : EntityProperties {
 		}
 		// dereference array that should not be used.
 		VulnerableTo = null;
-		// force the ai components to the correct state.
 		StartCoroutine("UpdateAIPath");
 	}
 	
 	IEnumerator UpdateAIPath()
 	{
-		while (EnemyActive)
+		while (true)
 		{
-			m_AIPath.target = GetClosestTarget();
+			if(EnemyActive)
+			{
+				m_AIPath.target = GetClosestTarget();
+			}
 			yield return new WaitForSeconds(ReassignTargetRate);
 		}
 	}
