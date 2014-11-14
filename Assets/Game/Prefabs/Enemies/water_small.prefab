@@ -46,11 +46,11 @@ GameObject:
   - 114: {fileID: 11400010}
   - 114: {fileID: 11400008}
   - 143: {fileID: 14300000}
-  - 136: {fileID: 13600000}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400004}
+  - 136: {fileID: 13600000}
   m_Layer: 0
-  m_Name: fire_small
+  m_Name: water_small
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,7 +126,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d4f40d8d764179047be4ab32b724a521, type: 2}
+  - {fileID: 2100000, guid: 64d518ea66889014f911c6f54711955c, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -243,10 +243,10 @@ MonoBehaviour:
   DamageAmount: 1
   ReassignTargetRate: .800000012
   TimeBetweenAttacks: 1
-  VulnerableTo: 00000000
+  VulnerableTo: 01000000
 --- !u!136 &13600000
 CapsuleCollider:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
