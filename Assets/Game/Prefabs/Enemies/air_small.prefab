@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d885801dd9dec2b479939aa73822717b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ReassignTargetRate: .800000012
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -241,7 +242,6 @@ MonoBehaviour:
   HealthPoints: 50
   Shield: 0
   DamageAmount: 1
-  ReassignTargetRate: .800000012
   TimeBetweenAttacks: 1
   VulnerableTo: 03000000
 --- !u!136 &13600000
