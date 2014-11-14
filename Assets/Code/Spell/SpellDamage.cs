@@ -21,7 +21,6 @@ public class SpellDamage : MonoBehaviour {
 		DebugUtils.Assert(m_SpellLogic != null, "Couldn't find SpellLogic component");
 	}
 
-	// Use this for initialization
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Enemy")
