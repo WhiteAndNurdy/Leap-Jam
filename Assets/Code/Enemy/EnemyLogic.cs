@@ -90,9 +90,12 @@ public class EnemyLogic : EntityLogic
 
 	public void Attack()
 	{
-		Debug.Log("Reached Attack");
-		StopCoroutine("UpdateAIPath");
-		StartCoroutine("MoveInToAttack");
+		if (m_EnemyProperties.EnemyActive)
+		{
+			Debug.Log("Reached Attack");
+			StopCoroutine("UpdateAIPath");
+			StartCoroutine("MoveInToAttack");
+		}
 	}
 
 	public void Damage(float amount, Elements type)

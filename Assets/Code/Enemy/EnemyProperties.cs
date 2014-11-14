@@ -38,8 +38,6 @@ public class EnemyProperties : EntityProperties {
 		{
 			VulnerableToUnique.Add(element);
 		}
-		// dereference array that should not be used.
-		VulnerableTo = null;
 	}
 
 	public bool IsVulnerableTo(Elements type)
