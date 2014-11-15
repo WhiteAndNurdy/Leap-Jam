@@ -16,6 +16,7 @@ public class EnemyProperties : EntityProperties {
 			gameObject.GetComponent<Seeker>().enabled = value;
 		}
 	}
+
 	public float DamageAmount;
 	public float TimeBetweenAttacks;
 	public Elements[] VulnerableTo = new Elements[1];
@@ -27,6 +28,7 @@ public class EnemyProperties : EntityProperties {
 	void Awake()
 	{
 		m_Tower = GameObject.FindGameObjectWithTag("Tower");
+		EnemyActive = false;
 	}
 
 	// Use this for initialization
