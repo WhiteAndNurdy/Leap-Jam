@@ -12,8 +12,7 @@ public class Spawner : MonoBehaviour
 	
 	private List<GameObject> enemyList;
 	private int enemiesSpawned = 0;
-
-	//public float spawnAmount;
+	private bool grouping;
 
 	void Start () 
 	{
@@ -28,10 +27,8 @@ public class Spawner : MonoBehaviour
 			SpawnEnemy();
 			yield return new WaitForSeconds(enemySpawnDelay);
 		}
-		foreach (GameObject enemy in enemyList)
-		{
-			enemy.GetComponent<EnemyProperties>().EnemyActive = true;
-		}
+		// all enemies spawned. no longer grouping!
+		SetGrouping(false);
 		yield return new WaitForSeconds(groupSpawnDelay);
 		hasGroupAssigned = false;
 	}
@@ -55,6 +52,7 @@ public class Spawner : MonoBehaviour
 			enemyList.Add(enemy);
 		}
 		enemiesSpawned = 0;
+		SetGrouping(true);
 		StartCoroutine("CheckEnemySpawn");
 	}
 
@@ -63,7 +61,32 @@ public class Spawner : MonoBehaviour
 		Vector3 enemyPosition = transform.position;
 		enemyPosition.y += enemyList[enemiesSpawned].GetComponent<CharacterController>().height;
 		enemyList[enemiesSpawned].transform.position = enemyPosition;
-		//enemyList[enemiesSpawned].GetComponent<EnemyProperties>().EnemyActive = true;
+		StartCoroutine(MoveEnemyToGroupPoint(enemyList[enemiesSpawned]));
 		++enemiesSpawned;
+	}
+
+	IEnumerator MoveEnemyToGroupPoint(GameObject enemy)
+	{
+		while (grouping)
+		{
+			Vector3 dir = transform.FindChild("GroupPoint").position - enemy.transform.position;
+			Vector3 movement = dir.normalized * enemy.GetComponent<AIPath>().speed * Time.deltaTime;
+			if (movement.magnitude > dir.magnitude)
+				movement = dir;
+			enemy.GetComponent<CharacterController>().Move(movement);
+			yield return null;
+		}
+	}
+
+	void SetGrouping(bool val)
+	{
+		grouping = val;
+		if(!grouping)
+		{
+			foreach (var enemy in enemyList)
+			{
+				enemy.GetComponent<EnemyProperties>().EnemyActive = true;
+			}
+		}
 	}
 }
