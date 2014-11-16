@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Scanner : MonoBehaviour 
 {
+
+	private HashSet<GameObject> m_GroupSet;
+
 	private static Scanner _instance;
 
 	public static Scanner instance
@@ -40,12 +44,12 @@ public class Scanner : MonoBehaviour
 	}
 
 	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public void Initialize()
+	{
+		GameObject[] groups = GameObject.FindGameObjectsWithTag("Group");
+		foreach (GameObject group in groups)
+		{
+			m_GroupSet.Add(group);
+		}
 	}
 }

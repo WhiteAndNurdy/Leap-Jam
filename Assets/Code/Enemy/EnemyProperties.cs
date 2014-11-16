@@ -14,6 +14,7 @@ public class EnemyProperties : EntityProperties {
 			m_EnemyActive = value;
 			//gameObject.GetComponent<AIPath>().enabled = value;
 			gameObject.GetComponent<Seeker>().enabled = value;
+			gameObject.GetComponent<MeshRenderer>().enabled = value;
 		}
 	}
 	public bool EnemySpawned { get; set; }

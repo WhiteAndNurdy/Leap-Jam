@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
 
 		levelFromXML = Utilities.LoadLevelFile("LevelX");
 		CreateLevelFromXML();
+		InitializeScanner();
 
 		AddWaveToSpawners(currentWave);
 		StartCoroutine("CheckIfWaveEnded");
@@ -76,6 +77,11 @@ public class GameManager : MonoBehaviour
 
 			waves.Add(waveObj);
 		}
+	}
+
+	private void InitializeScanner()
+	{
+		Scanner.instance.Initialize();
 	}
 
 	private void AddWaveToSpawners(int currentWaveIndex)
