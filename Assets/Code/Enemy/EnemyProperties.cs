@@ -16,6 +16,7 @@ public class EnemyProperties : EntityProperties {
 			gameObject.GetComponent<Seeker>().enabled = value;
 		}
 	}
+	public bool EnemySpawned { get; set; }
 
 	public float DamageAmount;
 	public float TimeBetweenAttacks;

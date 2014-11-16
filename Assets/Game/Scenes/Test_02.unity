@@ -4194,6 +4194,7 @@ MonoBehaviour:
   wavePrefab: {fileID: 100000, guid: d2aa1367f37e82f45b5318444ef7c487, type: 2}
   groupPrefab: {fileID: 100000, guid: 7dd25cd32bedf1f4d856326954545bc0, type: 2}
   enemyPrefab: {fileID: 100002, guid: a281e2dbba27b3b4db3c040104a54181, type: 2}
+  waveDelay: 10
 --- !u!4 &1957059519
 Transform:
   m_ObjectHideFlags: 0

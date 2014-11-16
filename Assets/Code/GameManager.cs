@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 	public GameObject groupPrefab;
 	public GameObject enemyPrefab;
 
+	public float waveDelay = 10.0f;
+
 	//File pulled from resources
 	private LevelFromXML levelFromXML;
 	private int currentWave = 0;
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
 		CreateLevelFromXML();
 
 		AddWaveToSpawners(currentWave);
+		StartCoroutine("CheckIfWaveEnded");
 	}
 
 	void Update()
@@ -65,6 +68,7 @@ public class GameManager : MonoBehaviour
 					enemyObj.GetComponent<EnemyProperties>().HealthPoints = enemy.health;
 					enemyObj.GetComponent<EnemyProperties>().Shield = enemy.hasShield;
 					enemyObj.GetComponent<EnemyProperties>().EnemyActive = false;
+					enemyObj.GetComponent<EnemyProperties>().EnemySpawned = false;
 					enemyObj.transform.parent = groupObj.transform;
 				}
 				groupObj.transform.parent = waveObj.transform;
@@ -111,18 +115,32 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void CheckIfWaveEnded()
+	private IEnumerator CheckIfWaveEnded()
 	{
-		var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-		waveEnded = true;
-
-		foreach(var enemy in enemies)
+		while (true)
 		{
-			if (enemy.GetComponent<EnemyProperties>().EnemyActive)
+			var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+			waveEnded = false;
+			bool enemyActive = false;
+
+			if (enemies != null)
 			{
-				waveEnded = false;
-				break;
+				foreach (var enemy in enemies)
+				{
+					if (enemy.GetComponent<EnemyProperties>().EnemySpawned)
+					{
+						enemyActive = true;
+						break;
+					}
+				}
 			}
+
+			if (!enemyActive)
+			{
+				yield return new WaitForSeconds(waveDelay);
+				waveEnded = true;
+			}
+			yield return null;
 		}
 	}
 

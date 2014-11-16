@@ -113,6 +113,7 @@ public class EnemyLogic : EntityLogic
 	public override void Die()
 	{
 		base.Die();
+		m_EnemyProperties.EnemySpawned = false;
 		EnemyPoolProperties.instance.RemoveEnemy(gameObject);
 	}
 

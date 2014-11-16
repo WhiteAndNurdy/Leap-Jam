@@ -61,6 +61,7 @@ public class Spawner : MonoBehaviour
 		Vector3 enemyPosition = transform.position;
 		enemyPosition.y += enemyList[enemiesSpawned].GetComponent<CharacterController>().height;
 		enemyList[enemiesSpawned].transform.position = enemyPosition;
+		enemyList[enemiesSpawned].GetComponent<EnemyProperties>().EnemySpawned = true;
 		StartCoroutine(MoveEnemyToGroupPoint(enemyList[enemiesSpawned]));
 		++enemiesSpawned;
 	}
