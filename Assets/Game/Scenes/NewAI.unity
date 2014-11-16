@@ -143,7 +143,7 @@ Transform:
   m_LocalScale: {x: 50, y: 1, z: 50}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!1 &161861651
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +174,7 @@ Transform:
   m_Children:
   - {fileID: 1787198100}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
 --- !u!114 &161861653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   astarData:
     hasBeenReverted: 0
-    data: 504b030414000008080054037145b5a1675209020000010400000b0024006772617068302e6a736f6e0a0020000000000001001800b42df0c6f401d001b42df0c6f401d001b42df0c6f401d0015d535d6f9b3014fd2b939f49c44709216f5db26693bab56a36eda1ea83814bb0626c649b354995ffbe6bf3915090009f737defb9e79a0fb26f5941561fe41fe52d9015f1a3224bb3ac8ca00ce318ca1904591ea67e99f85114a565442e1ea1ba81dcbc50c32459851e615ad66014cbefc59e6316df234a1a4b0b9bfbe890937b9ef18919721006d4849cf9f3c0f16114cfc365b8f09718d88a9cd3ba8162c7ced0c7c77eb703df182164011d894a72c939d37d5d736a6c4b6bdae8166579a4601475daba58a902b6afcc74d753596a305d03f4b4610adb74c9c857692acc50537db8b12b0ec2cb90e9e7940ae30552a592f5f7be5060659b8ae587177acaa946a8a45cc314dcdc6a6c9b8945c1d5bf41f1ba821ccb1ad5c2206402b5e29df203cd38fcad40fc925b255b518cac8670d3cbb8d8ee8e6bceeacc551a16f747a60760c7a5b5344539a0d0f71f28d48d593b8988594d7f34fca67b3db6d7c30f4c6983844b465b231f99386c152bae9103ba61da3cb29a39d770c4b6af4cb60a23c937e7265ad09ab554022cd875d380a0dc9c9eb19a990ef31333d6fb843fd0dcc8cef99ee90ff434dc8163ac9d2a13b89ff2e78e7725d1283108133852546e7bfdb255b4b127a950f47dcbceb51ce53351ca5dae00c4d3cdde9ae28f751c0f1646bf46f3d45dc9c2f3fb3bb87ef5e472898bd95d9abaf522f5dcff350beee6499044c922f182b7cbe53f504b030414000008080054037145287e18aa4300000048000000120024006772617068305f656469746f722e6a736f6e0a0020000000000001001800cb54f0c6f401d001cb54f0c6f401d001cb54f0c6f401d001ab56cac94fce4e4d51b22a292a4dd5512acec82f77ad28294a54b24a4bcc29068a94a456949416a58665166726e5a4c2d4156496e59728592939a7e695a41629d50200504b0304140000080800540371457e5d90467400000083000000090024006d6574612e6a736f6e0a0020000000000001001800cb54f0c6f401d001cb54f0c6f401d001cb54f0c6f401d0011d8cb10ec2201040ffe5e64a281762e8ead0cdb89b0e20772d834743a98931febbc5ed0defbd0fbca86c290b0c80ca2a031dccc5afcb06437fe09ee24177d018830b8191d8584b7ca23e3c8cd37cd688e81861eaa0be57bafa27fd8b9baf0b27894966359614c7766d96e44897bc4b6d9a9ebe3f504b01022d0014000008080054037145b5a1675209020000010400000b00240000000000000000000000000000006772617068302e6a736f6e0a0020000000000001001800b42df0c6f401d001b42df0c6f401d001b42df0c6f401d001504b01022d0014000008080054037145287e18aa43000000480000001200240000000000000000000000560200006772617068305f656469746f722e6a736f6e0a0020000000000001001800cb54f0c6f401d001cb54f0c6f401d001cb54f0c6f401d001504b01022d00140000080800540371457e5d904674000000830000000900240000000000000000000000ed0200006d6574612e6a736f6e0a0020000000000001001800cb54f0c6f401d001cb54f0c6f401d001cb54f0c6f401d001504b050600000000030003001c010000ac0300000000
+    data: 504b030414000008080006057145b5a1675209020000010400000b0024006772617068302e6a736f6e0a00200000000000010018000c19c8aaf601d0010c19c8aaf601d0010c19c8aaf601d0015d535d6f9b3014fd2b939f49c44709216f5db26693bab56a36eda1ea83814bb0626c649b354995ffbe6bf3915090009f737defb9e79a0fb26f5941561fe41fe52d9015f1a3224bb3ac8ca00ce318ca1904591ea67e99f85114a565442e1ea1ba81dcbc50c32459851e615ad66014cbefc59e6316df234a1a4b0b9bfbe890937b9ef18919721006d4849cf9f3c0f16114cfc365b8f09718d88a9cd3ba8162c7ced0c7c77eb703df182164011d894a72c939d37d5d736a6c4b6bdae8166579a4601475daba58a902b6afcc74d753596a305d03f4b4610adb74c9c857692acc50537db8b12b0ec2cb90e9e7940ae30552a592f5f7be5060659b8ae587177acaa946a8a45cc314dcdc6a6c9b8945c1d5bf41f1ba821ccb1ad5c2206402b5e29df203cd38fcad40fc925b255b518cac8670d3cbb8d8ee8e6bceeacc551a16f747a60760c7a5b5344539a0d0f71f28d48d593b8988594d7f34fca67b3db6d7c30f4c6983844b465b231f99386c152bae9103ba61da3cb29a39d770c4b6af4cb60a23c937e7265ad09ab554022cd875d380a0dc9c9eb19a990ef31333d6fb843fd0dcc8cef99ee90ff434dc8163ac9d2a13b89ff2e78e7725d1283108133852546e7bfdb255b4b127a950f47dcbceb51ce53351ca5dae00c4d3cdde9ae28f751c0f1646bf46f3d45dc9c2f3fb3bb87ef5e472898bd95d9abaf522f5dcff350beee6499044c922f182b7cbe53f504b030414000008080006057145287e18aa4300000048000000120024006772617068305f656469746f722e6a736f6e0a00200000000000010018000c19c8aaf601d0010c19c8aaf601d0010c19c8aaf601d001ab56cac94fce4e4d51b22a292a4dd5512acec82f77ad28294a54b24a4bcc29068a94a456949416a58665166726e5a4c2d4156496e59728592939a7e695a41629d50200504b0304140000080800060571457e5d90467400000083000000090024006d6574612e6a736f6e0a00200000000000010018002340c8aaf601d0012340c8aaf601d0012340c8aaf601d0011d8cb10ec2201040ffe5e64a281762e8ead0cdb89b0e20772d834743a98931febbc5ed0defbd0fbca86c290b0c80ca2a031dccc5afcb06437fe09ee24177d018830b8191d8584b7ca23e3c8cd37cd688e81861eaa0be57bafa27fd8b9baf0b27894966359614c7766d96e44897bc4b6d9a9ebe3f504b01022d0014000008080006057145b5a1675209020000010400000b00240000000000000000000000000000006772617068302e6a736f6e0a00200000000000010018000c19c8aaf601d0010c19c8aaf601d0010c19c8aaf601d001504b01022d0014000008080006057145287e18aa43000000480000001200240000000000000000000000560200006772617068305f656469746f722e6a736f6e0a00200000000000010018000c19c8aaf601d0010c19c8aaf601d0010c19c8aaf601d001504b01022d00140000080800060571457e5d904674000000830000000900240000000000000000000000ed0200006d6574612e6a736f6e0a00200000000000010018002340c8aaf601d0012340c8aaf601d0012340c8aaf601d001504b050600000000030003001c010000ac0300000000
     data_backup: 
     data_cachedStartup: 
     revertData: 
@@ -327,11 +327,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 283882214}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 45.2827988}
+  m_LocalPosition: {x: 6.30770111, y: 4.79994965, z: 41.1874275}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 921002615}
+  m_RootOrder: 0
 --- !u!1 &305135486
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +410,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!1 &314831142
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +464,7 @@ Transform:
   m_LocalScale: {x: .293168038, y: .293168068, z: .293168068}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!1001 &362540876
 Prefab:
   m_ObjectHideFlags: 0
@@ -797,6 +797,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1271420975}
   m_RootOrder: 4
+--- !u!1 &921002614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 921002615}
+  m_Layer: 0
+  m_Name: EnemyAIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &921002615
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 921002614}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.30770111, y: -4.79994965, z: 4.09537029}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 283882216}
+  - {fileID: 1828781252}
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
 --- !u!1001 &934098848
 Prefab:
   m_ObjectHideFlags: 0
@@ -1002,7 +1031,7 @@ Transform:
   m_Children:
   - {fileID: 892179585}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!114 &1204781032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1395,7 +1424,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &1787198099
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,6 +1452,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 161861652}
   m_RootOrder: 0
+--- !u!1 &1828781251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1828781252}
+  - 114: {fileID: 1828781254}
+  - 114: {fileID: 1828781253}
+  m_Layer: 0
+  m_Name: Flocking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1828781252
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1828781251}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 921002615}
+  m_RootOrder: 1
+--- !u!114 &1828781253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1828781251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef920fa0ffd46e1409a4f1f17f08752e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1828781254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1828781251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a84f7f8b9700bb74792e2db9cd35862e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1843288562
 Prefab:
   m_ObjectHideFlags: 0
@@ -1505,7 +1585,7 @@ Transform:
   m_Children:
   - {fileID: 1420968416}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
 --- !u!114 &1971162086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1740,7 +1820,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
 --- !u!1 &2103984280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1771,7 +1851,7 @@ Transform:
   m_Children:
   - {fileID: 1500889367}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!114 &2103984282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1946,4 +2026,4 @@ Transform:
   m_Children:
   - {fileID: 1564921682}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9

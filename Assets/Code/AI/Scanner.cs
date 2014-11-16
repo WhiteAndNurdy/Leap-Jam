@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class Boid : MonoBehaviour 
+public class Scanner : MonoBehaviour 
 {
-	private static Boid _instance;
+	private static Scanner _instance;
 
-	public static Boid instance
+	public static Scanner instance
 	{
 		get
 		{
 			if (_instance == null)
 			{
-				_instance = GameObject.FindObjectOfType<Boid>();
+				_instance = GameObject.FindObjectOfType<Scanner>();
 
 				//Tell unity not to destroy this object when loading a new scene!
 				DontDestroyOnLoad(_instance.gameObject);
@@ -40,15 +39,13 @@ public class Boid : MonoBehaviour
 		}
 	}
 
+	// Use this for initialization
+	void Start () {
 	
-	void Start () 
-	{
-
 	}
-
-	void Update()
-	{
-
+	
+	// Update is called once per frame
+	void Update () {
+	
 	}
-
 }
