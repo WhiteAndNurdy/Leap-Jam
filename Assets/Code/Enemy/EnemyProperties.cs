@@ -12,7 +12,7 @@ public class EnemyProperties : EntityProperties {
 		set
 		{
 			m_EnemyActive = value;
-			gameObject.GetComponent<AIPath>().enabled = value;
+			//gameObject.GetComponent<AIPath>().enabled = value;
 			gameObject.GetComponent<Seeker>().enabled = value;
 		}
 	}
