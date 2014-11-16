@@ -127,12 +127,9 @@ public class EnemyPoolProperties : MonoBehaviour {
 			//another reference in scene, destroy it!
 			if (this != _instance)
 				Destroy(this.gameObject);
+			return;
 		}
-	}
 
-	// Use this for initialization
-	void Start () 
-	{
 		GameObject container = new GameObject();
 		container.name = "Unclaimed Pooled Objects";
 		foreach (var enemy in EnemyPoolEntries)
@@ -141,7 +138,7 @@ public class EnemyPoolProperties : MonoBehaviour {
 			GameObject subContainer = new GameObject();
 			subContainer.name = enemy.Name + " Container";
 			subContainer.transform.parent = container.transform;
-			for(int i = 0; i < enemy.Count; ++i)
+			for (int i = 0; i < enemy.Count; ++i)
 			{
 				GameObject newObject = Instantiate(enemy.EnemyPrefab) as GameObject;
 				newObject.name = enemy.Name;
@@ -149,6 +146,12 @@ public class EnemyPoolProperties : MonoBehaviour {
 				m_EnemyPoolMap[enemy.Name].Add(newObject);
 			}
 		}
+	}
+
+	// Use this for initialization
+	void Start () 
+	{
+		
 	}
 	
 	public List<GameObject> GetEnemiesWithName(string name, int amount)

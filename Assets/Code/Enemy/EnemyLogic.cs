@@ -2,7 +2,6 @@
 using System.Collections;
 
 [RequireComponent(typeof(EnemyProperties))]
-[RequireComponent(typeof(AIPath))]
 public class EnemyLogic : EntityLogic
 {
 	public float ReassignTargetRate = 0.2f;

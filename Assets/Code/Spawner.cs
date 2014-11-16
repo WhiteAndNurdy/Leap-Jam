@@ -14,10 +14,15 @@ public class Spawner : MonoBehaviour
 	private int enemiesSpawned = 0;
 	private bool grouping;
 
-	void Start () 
+	void Awake ()
 	{
 		enemyList = new List<GameObject>();
 		hasGroupAssigned = false;
+	}
+
+	void Start () 
+	{
+		
 	}
 
 	IEnumerator CheckEnemySpawn()
