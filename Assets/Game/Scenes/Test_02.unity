@@ -2305,6 +2305,10 @@ Prefab:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2300002, guid: 74c130f1df57d1248a8367a845e0b532, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c658a11200ee8074dadd76904d880366, type: 2}
     m_RemovedComponents:
     - {fileID: 9500000, guid: 74c130f1df57d1248a8367a845e0b532, type: 3}
   m_ParentPrefab: {fileID: 100100000, guid: 74c130f1df57d1248a8367a845e0b532, type: 3}
@@ -3671,7 +3675,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: f95218718faa1b44f8a31d7fa80a73af, type: 2}
+  - {fileID: 2100000, guid: c658a11200ee8074dadd76904d880366, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -4527,8 +4531,8 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: b47514685a1fd2945ade2d218e6de9b6, type: 2}
-  - {fileID: 2100000, guid: f95218718faa1b44f8a31d7fa80a73af, type: 2}
+  - {fileID: 2100000, guid: c658a11200ee8074dadd76904d880366, type: 2}
+  - {fileID: 2100000, guid: c658a11200ee8074dadd76904d880366, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
