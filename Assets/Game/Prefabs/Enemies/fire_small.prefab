@@ -47,7 +47,6 @@ GameObject:
   - 114: {fileID: 11400008}
   - 143: {fileID: 14300000}
   - 114: {fileID: 11400004}
-  - 136: {fileID: 13600000}
   - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: fire_small
@@ -245,19 +244,6 @@ MonoBehaviour:
   DamageAmount: 1
   TimeBetweenAttacks: 1
   VulnerableTo: 00000000
---- !u!136 &13600000
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: .5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &14300000
 CharacterController:
   m_ObjectHideFlags: 1
@@ -265,8 +251,8 @@ CharacterController:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: .5
+  m_Height: 4
+  m_Radius: 1
   m_SlopeLimit: 10
   m_StepOffset: .300000012
   m_SkinWidth: .0799999982

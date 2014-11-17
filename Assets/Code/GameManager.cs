@@ -113,7 +113,6 @@ public class GameManager : MonoBehaviour
 							enemies.Add(child.gameObject);
 						}
 					}
-
 					spawner.GetComponent<Spawner>().AssignGroup(enemies);
 					break;
 				}

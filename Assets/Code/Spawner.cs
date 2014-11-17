@@ -56,6 +56,10 @@ public class Spawner : MonoBehaviour
 		{
 			enemyList.Add(enemy);
 		}
+		if (enemyList.Count > 0)
+		{
+			enemyList[0].transform.parent.GetComponent<GroupLogic>().MovementState = AIMovementState.Organizing;
+		}
 		enemiesSpawned = 0;
 		SetGrouping(true);
 		StartCoroutine("CheckEnemySpawn");
@@ -76,10 +80,10 @@ public class Spawner : MonoBehaviour
 		while (grouping)
 		{
 			Vector3 dir = transform.FindChild("GroupPoint").position - enemy.transform.position;
-			Vector3 movement = dir.normalized * enemy.GetComponent<AIPath>().speed * Time.deltaTime;
+			Vector3 movement = dir.normalized * enemy.GetComponent<AIPath>().speed;
 			if (movement.magnitude > dir.magnitude)
 				movement = dir;
-			enemy.GetComponent<CharacterController>().Move(movement);
+			enemy.GetComponent<EnemyLogic>().Move(movement);
 			yield return null;
 		}
 	}
@@ -92,6 +96,7 @@ public class Spawner : MonoBehaviour
 			foreach (var enemy in enemyList)
 			{
 				enemy.GetComponent<EnemyProperties>().EnemyActive = true;
+				enemy.transform.parent.GetComponent<GroupLogic>().MovementState = AIMovementState.Moving;
 			}
 		}
 	}

@@ -25,7 +25,8 @@ public class EnemyPath : AIPath
 		}
 		else if (logic != null)
 		{
-			logic.Move(dir);
+			if(transform.parent.GetComponent<GroupLogic>().MovementState == AIMovementState.Moving)
+				logic.Move(dir);
 		}
 		else if (controller != null)
 		{

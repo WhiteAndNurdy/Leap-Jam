@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Boid : MonoBehaviour 
 {
+	// if for 5 frames, all boids in a group have'nt moved more than X, they have formed!
+
 	private static Boid _instance;
 
 	public static Boid instance
@@ -57,19 +59,23 @@ public class Boid : MonoBehaviour
 		{
 			Vector3 v1, v2, v3;
 			CalculateGroupCenter(group, out v1, out v3);
-			foreach (Transform child in group.transform)
+			group.GetComponent<GroupLogic>().Center = v1;
+			if (group.GetComponent<GroupLogic>().MovementState == AIMovementState.Organizing)
 			{
-				Vector3 newV3 = v3;
-				newV3 -= child.GetComponent<CharacterController>().velocity;
-				newV3.Normalize();
-				DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
-				v2 = AvoidCollision(child);
+				foreach (Transform child in group.transform)
+				{
+					Vector3 newV3 = v3;
+					newV3 -= child.GetComponent<CharacterController>().velocity;
+					newV3.Normalize();
+					DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
+					v2 = AvoidCollision(child);
 
-				Vector3 dir = (v1 + v2 + newV3) - child.position;
-				Vector3 movement = dir.normalized * child.GetComponent<AIPath>().speed;
-				if (movement.sqrMagnitude > dir.sqrMagnitude)
-					movement = dir;
-				child.GetComponent<EnemyLogic>().Move(movement);
+					Vector3 dir = (v1 + v2 + newV3) - child.position;
+					Vector3 movement = dir.normalized * child.GetComponent<AIPath>().speed;
+					if (movement.sqrMagnitude > dir.sqrMagnitude)
+						movement = dir;
+					child.GetComponent<EnemyLogic>().Move(movement);
+				}
 			}
 		}
 	}

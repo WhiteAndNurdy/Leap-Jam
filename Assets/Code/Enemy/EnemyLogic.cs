@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 [RequireComponent(typeof(EnemyProperties))]
 public class EnemyLogic : EntityLogic
 {
@@ -11,8 +12,8 @@ public class EnemyLogic : EntityLogic
 	private GameObject m_Tower;
 	private GameObject m_Shield;
 	private EnemyPath m_Path;
+	private CharacterController m_Controller; 
 	private Vector3 m_TotalFrameMovement;
-
 
 	void Awake()
 	{
@@ -21,20 +22,23 @@ public class EnemyLogic : EntityLogic
 		m_Shield = transform.FindChild("Shield").gameObject;
 		m_Path = gameObject.GetComponent<EnemyPath>();
 		m_TotalFrameMovement = new Vector3();
+		m_Controller = GetComponent<CharacterController>();
 	}
+
 	// Use this for initialization
 	protected override void Start()
 	{
 		base.Start();
 		DebugUtils.Assert(m_Tower != null, "Tower object not found!");
 		DebugUtils.Assert(m_Shield != null, "Shield child not found!");
+		DebugUtils.Assert(m_Controller != null, "No charactercontroller found!");
 		StartCoroutine("UpdateAIPath");
 	}
 
 	protected override void Update()
 	{
 		base.Update();
-		GetComponent<CharacterController>().SimpleMove(m_TotalFrameMovement);
+		m_Controller.SimpleMove(m_TotalFrameMovement);
 		m_TotalFrameMovement = Vector3.zero;
 	}
 
