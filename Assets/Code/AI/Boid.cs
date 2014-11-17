@@ -4,10 +4,6 @@ using System.Collections.Generic;
 
 public class Boid : MonoBehaviour 
 {
-
-	// TODO:
-	// Integrate the AIPath into this file. Calculate the paths and combine the velocity for the path direction with the grouping velocity.
-	// find out how to avoid obstacles
 	private static Boid _instance;
 
 	public static Boid instance
@@ -59,14 +55,17 @@ public class Boid : MonoBehaviour
 	{
 		foreach (GameObject group in Scanner.instance.GroupSet)
 		{
-			Vector3 v1, v2;
-			CalculateGroupCenter(group, out v1);
+			Vector3 v1, v2, v3;
+			CalculateGroupCenter(group, out v1, out v3);
 			foreach (Transform child in group.transform)
 			{
+				Vector3 newV3 = v3;
+				newV3 -= child.GetComponent<CharacterController>().velocity;
+				newV3.Normalize();
 				DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
 				v2 = AvoidCollision(child);
 
-				Vector3 dir = (v1 + v2) - child.position;
+				Vector3 dir = (v1 + v2 + newV3) - child.position;
 				Vector3 movement = dir.normalized * child.GetComponent<AIPath>().speed;
 				if (movement.sqrMagnitude > dir.sqrMagnitude)
 					movement = dir;
@@ -75,15 +74,17 @@ public class Boid : MonoBehaviour
 		}
 	}
 
-	void CalculateGroupCenter(GameObject group, out Vector3 center)
+	void CalculateGroupCenter(GameObject group, out Vector3 center, out Vector3 velocity)
 	{
 		center = new Vector3();
+		velocity = new Vector3();
 		foreach (Transform child in group.transform)
 		{
 			center += child.position;
+			velocity += child.GetComponent<CharacterController>().velocity;
 		}
 		center /= group.transform.childCount;
-
+		velocity /= group.transform.childCount;
 	}
 
 	Vector3 AvoidCollision(Transform boid)
