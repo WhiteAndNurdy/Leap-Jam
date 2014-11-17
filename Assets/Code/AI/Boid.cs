@@ -48,7 +48,56 @@ public class Boid : MonoBehaviour
 
 	void Update()
 	{
-
+		MoveAllBoidsToNewPositions();
 	}
 
+	void MoveAllBoidsToNewPositions()
+	{
+		foreach (GameObject group in Scanner.instance.GroupSet)
+		{
+			Vector3 v1, v2, v3;
+			CalculateGroupCenterAndVelocity(group, out v1, out v3);
+			foreach (Transform child in group.transform)
+			{
+				DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
+				v2 = AvoidCollision(child);
+
+				Vector3 dir = (v1 + v2 + v3) - child.position;
+				Vector3 movement = dir.normalized * child.GetComponent<AIPath>().speed * Time.deltaTime;
+				if (movement.sqrMagnitude > dir.sqrMagnitude)
+					movement = dir;
+				child.GetComponent<CharacterController>().Move(movement);
+			}
+		}
+	}
+
+	void CalculateGroupCenterAndVelocity(GameObject group, out Vector3 center, out Vector3 velocity)
+	{
+		center = new Vector3();
+		velocity = new Vector3();
+		foreach (Transform child in group.transform)
+		{
+			center += child.position;
+			velocity += child.GetComponent<CharacterController>().velocity;
+		}
+		center /= group.transform.childCount;
+		velocity /= group.transform.childCount;
+	}
+
+	Vector3 AvoidCollision(Transform boid)
+	{
+		Vector3 displacement = new Vector3();
+
+		foreach (Transform otherBoid in boid.transform.parent)
+		{
+			if (boid != otherBoid)
+			{
+				if (Vector3.Magnitude(otherBoid.position - boid.position) < boid.GetComponent<CharacterController>().radius)
+				{
+					displacement -= (otherBoid.position - boid.position);
+				}
+			}
+		}
+		return displacement;
+	}
 }

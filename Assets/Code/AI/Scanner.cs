@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 public class Scanner : MonoBehaviour 
 {
-
+	public HashSet<GameObject> GroupSet
+	{
+		get { return m_GroupSet; }
+		set { m_GroupSet = value; }
+	}
 	private HashSet<GameObject> m_GroupSet;
 
 	private static Scanner _instance;
@@ -41,6 +45,7 @@ public class Scanner : MonoBehaviour
 				Destroy(this.gameObject);
 			return;
 		}
+		m_GroupSet = new HashSet<GameObject>();
 	}
 
 	// Use this for initialization
@@ -49,7 +54,7 @@ public class Scanner : MonoBehaviour
 		GameObject[] groups = GameObject.FindGameObjectsWithTag("Group");
 		foreach (GameObject group in groups)
 		{
-			m_GroupSet.Add(group);
+			GroupSet.Add(group);
 		}
 	}
 }

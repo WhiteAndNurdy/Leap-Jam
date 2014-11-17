@@ -69,7 +69,7 @@ public class EnemyLogic : EntityLogic
 		{
 			Vector3 dir = m_Tower.transform.position - transform.position;
 			Vector3 movement = dir.normalized * m_AIPath.speed * Time.deltaTime;
-			if (movement.magnitude > dir.magnitude)
+			if (movement.sqrMagnitude > dir.sqrMagnitude)
 				movement = dir;
 			GetComponent<CharacterController>().Move(movement);
 			yield return null;
