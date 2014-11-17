@@ -14,6 +14,7 @@ public class EnemyLogic : EntityLogic
 	private EnemyPath m_Path;
 	private CharacterController m_Controller; 
 	private Vector3 m_TotalFrameMovement;
+	private bool m_PathStarted = false;
 
 	void Awake()
 	{
@@ -32,7 +33,6 @@ public class EnemyLogic : EntityLogic
 		DebugUtils.Assert(m_Tower != null, "Tower object not found!");
 		DebugUtils.Assert(m_Shield != null, "Shield child not found!");
 		DebugUtils.Assert(m_Controller != null, "No charactercontroller found!");
-		StartCoroutine("UpdateAIPath");
 	}
 
 	protected override void Update()
@@ -40,6 +40,15 @@ public class EnemyLogic : EntityLogic
 		base.Update();
 		m_Controller.SimpleMove(m_TotalFrameMovement);
 		m_TotalFrameMovement = Vector3.zero;
+	}
+
+	public void InitializePath()
+	{
+		if (!m_PathStarted)
+		{
+			m_Path.enabled = true;
+			StartCoroutine(UpdateAIPath());
+		}
 	}
 
 	IEnumerator UpdateAIPath()
@@ -54,9 +63,9 @@ public class EnemyLogic : EntityLogic
 		}
 	}
 
-	Transform GetClosestTarget()
+	Vector3 GetClosestTarget()
 	{
-		Transform returnValue = m_Tower.transform;
+		Vector3 returnValue = m_Tower.transform.position;
 		Vector3 shortestDistance = m_Tower.transform.position - gameObject.transform.position;
 		foreach (GameObject target in GameObject.FindGameObjectsWithTag("Agent_Targets"))
 		{
@@ -64,10 +73,13 @@ public class EnemyLogic : EntityLogic
 			tempDistance = target.transform.position - gameObject.transform.position;
 			if (tempDistance.sqrMagnitude < shortestDistance.sqrMagnitude)
 			{
-				returnValue = target.transform.transform;
+				returnValue = target.transform.transform.position;
 				shortestDistance = tempDistance;
 			}
 		}
+		// this value should be the center position of the flock. make new targets for each enemy to avoid them interfering in eachother's paths
+		Vector3 offset = transform.parent.GetComponent<GroupLogic>().Center() - transform.position;
+		returnValue += offset;
 		return returnValue;
 	}
 

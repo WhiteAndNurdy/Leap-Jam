@@ -10,8 +10,6 @@ public enum AIMovementState
 
 public class GroupLogic : MonoBehaviour {
 
-	public Vector3 Center = new Vector3();
-
 	public AIMovementState MovementState
 	{
 		get { return m_MovementState; }
@@ -24,13 +22,26 @@ public class GroupLogic : MonoBehaviour {
 	{
 		MovementState = AIMovementState.Idle;
 	}
-	// Use this for initialization
-	void Start () 
+
+	public Vector3 Center()
 	{
+		Vector3 center = new Vector3();
+		foreach (Transform child in transform)
+		{
+			center += child.position;
+		}
+		center /= transform.childCount;
+		return center;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public Vector3 Velocity()
+	{
+		Vector3 velocity = new Vector3();
+		foreach (Transform child in transform)
+		{
+			velocity += child.GetComponent<CharacterController>().velocity;
+		}
+		velocity /= transform.childCount;
+		return velocity;
 	}
 }

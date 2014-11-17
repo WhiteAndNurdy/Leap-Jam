@@ -59,7 +59,6 @@ public class Boid : MonoBehaviour
 		{
 			Vector3 v1, v2, v3;
 			CalculateGroupCenter(group, out v1, out v3);
-			group.GetComponent<GroupLogic>().Center = v1;
 			if (group.GetComponent<GroupLogic>().MovementState == AIMovementState.Organizing)
 			{
 				foreach (Transform child in group.transform)
@@ -82,15 +81,8 @@ public class Boid : MonoBehaviour
 
 	void CalculateGroupCenter(GameObject group, out Vector3 center, out Vector3 velocity)
 	{
-		center = new Vector3();
-		velocity = new Vector3();
-		foreach (Transform child in group.transform)
-		{
-			center += child.position;
-			velocity += child.GetComponent<CharacterController>().velocity;
-		}
-		center /= group.transform.childCount;
-		velocity /= group.transform.childCount;
+		center = group.GetComponent<GroupLogic>().Center();
+		velocity = group.GetComponent<GroupLogic>().Velocity();
 	}
 
 	Vector3 AvoidCollision(Transform boid)

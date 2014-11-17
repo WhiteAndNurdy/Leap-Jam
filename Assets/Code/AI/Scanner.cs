@@ -43,7 +43,6 @@ public class Scanner : MonoBehaviour
 			//another reference in scene, destroy it!
 			if (this != _instance)
 				Destroy(this.gameObject);
-			return;
 		}
 		m_GroupSet = new HashSet<GameObject>();
 	}
