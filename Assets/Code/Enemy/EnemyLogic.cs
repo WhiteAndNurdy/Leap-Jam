@@ -34,7 +34,7 @@ public class EnemyLogic : EntityLogic
 	protected override void Update()
 	{
 		base.Update();
-		GetComponent<CharacterController>().SimpleMove(m_TotalFrameMovement.normalized);
+		GetComponent<CharacterController>().SimpleMove(m_TotalFrameMovement);
 		m_TotalFrameMovement = Vector3.zero;
 	}
 
@@ -77,7 +77,7 @@ public class EnemyLogic : EntityLogic
 		while (MovingTowardsTower)
 		{
 			Vector3 dir = m_Tower.transform.position - transform.position;
-			Vector3 movement = dir.normalized * m_Path.speed * Time.deltaTime;
+			Vector3 movement = dir.normalized * m_Path.speed;
 			if (movement.sqrMagnitude > dir.sqrMagnitude)
 				movement = dir;
 			Move(movement);
