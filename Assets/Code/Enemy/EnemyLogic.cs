@@ -10,7 +10,8 @@ public class EnemyLogic : EntityLogic
 	private EnemyProperties m_EnemyProperties;
 	private GameObject m_Tower;
 	private GameObject m_Shield;
-	private AIPath m_AIPath;
+	private EnemyPath m_Path;
+	private Vector3 m_TotalFrameMovement;
 
 
 	void Awake()
@@ -18,7 +19,8 @@ public class EnemyLogic : EntityLogic
 		m_EnemyProperties = GetComponent<EnemyProperties>();
 		m_Tower = GameObject.FindGameObjectWithTag("Tower");
 		m_Shield = transform.FindChild("Shield").gameObject;
-		m_AIPath = gameObject.GetComponent<AIPath>();
+		m_Path = gameObject.GetComponent<EnemyPath>();
+		m_TotalFrameMovement = new Vector3();
 	}
 	// Use this for initialization
 	protected override void Start()
@@ -29,13 +31,20 @@ public class EnemyLogic : EntityLogic
 		StartCoroutine("UpdateAIPath");
 	}
 
+	protected override void Update()
+	{
+		base.Update();
+		GetComponent<CharacterController>().SimpleMove(m_TotalFrameMovement.normalized);
+		m_TotalFrameMovement = Vector3.zero;
+	}
+
 	IEnumerator UpdateAIPath()
 	{
 		while (true)
 		{
 			if (m_EnemyProperties.EnemyActive)
 			{
-				m_AIPath.target = GetClosestTarget();
+				m_Path.target = GetClosestTarget();
 			}
 			yield return new WaitForSeconds(ReassignTargetRate);
 		}
@@ -60,7 +69,7 @@ public class EnemyLogic : EntityLogic
 
 	IEnumerator MoveInToAttack()
 	{
-		m_AIPath.enabled = false;
+		m_Path.enabled = false;
 		if (GetComponent<Seeker>() != null)
 		{
 			GetComponent<Seeker>().enabled = false;
@@ -68,10 +77,10 @@ public class EnemyLogic : EntityLogic
 		while (MovingTowardsTower)
 		{
 			Vector3 dir = m_Tower.transform.position - transform.position;
-			Vector3 movement = dir.normalized * m_AIPath.speed * Time.deltaTime;
+			Vector3 movement = dir.normalized * m_Path.speed * Time.deltaTime;
 			if (movement.sqrMagnitude > dir.sqrMagnitude)
 				movement = dir;
-			GetComponent<CharacterController>().Move(movement);
+			Move(movement);
 			yield return null;
 		}
 		StartCoroutine("CheckForAttack");
@@ -122,5 +131,10 @@ public class EnemyLogic : EntityLogic
 		DebugUtils.Assert(m_Tower.GetComponent<TowerLogic>() != null, "TowerLogic NULL!");
 		DebugUtils.Assert(m_EnemyProperties != null, "EnemyProperties NULL!");
 		m_Tower.GetComponent<TowerLogic>().Damage(m_EnemyProperties.DamageAmount);
+	}
+
+	public void Move(Vector3 amount)
+	{
+		m_TotalFrameMovement += amount;
 	}
 }

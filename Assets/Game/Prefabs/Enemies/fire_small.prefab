@@ -46,9 +46,9 @@ GameObject:
   - 114: {fileID: 11400010}
   - 114: {fileID: 11400008}
   - 143: {fileID: 14300000}
-  - 114: {fileID: 11400006}
   - 114: {fileID: 11400004}
   - 136: {fileID: 13600000}
+  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: fire_small
   m_TagString: Enemy
@@ -185,9 +185,9 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5ac18cdd242041b6bebc0e95b624c85, type: 3}
+  m_Script: {fileID: 11500000, guid: 765214d73385c7d4bb258b9c7164c8c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   repathRate: .5

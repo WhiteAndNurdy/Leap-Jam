@@ -70,7 +70,7 @@ public class Boid : MonoBehaviour
 				Vector3 movement = dir.normalized * child.GetComponent<AIPath>().speed * Time.deltaTime;
 				if (movement.sqrMagnitude > dir.sqrMagnitude)
 					movement = dir;
-				child.GetComponent<CharacterController>().Move(movement);
+				child.GetComponent<EnemyLogic>().Move(movement);
 			}
 		}
 	}
