@@ -61,6 +61,7 @@ public class Boid : MonoBehaviour
 			CalculateGroupCenter(group, out v1, out v3);
 			if (group.GetComponent<GroupLogic>().MovementState == AIMovementState.Organizing)
 			{
+				Debug.Log("Organizing");
 				foreach (Transform child in group.transform)
 				{
 					Vector3 newV3 = v3;
@@ -75,6 +76,11 @@ public class Boid : MonoBehaviour
 						movement = dir;
 					child.GetComponent<EnemyLogic>().Move(movement);
 				}
+			}
+			else
+			{
+				Debug.Log("Not Organizing");
+				int i = 0;
 			}
 		}
 	}

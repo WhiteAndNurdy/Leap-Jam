@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
 {
 	public bool hasGroupAssigned = false;
 	public float enemySpawnDelay = 1.0f;
+	public float formationDelay = 2.0f;
 	public float groupSpawnDelay = 10.0f;
 	
 	private List<GameObject> enemyList;
@@ -33,8 +34,9 @@ public class Spawner : MonoBehaviour
 			yield return new WaitForSeconds(enemySpawnDelay);
 		}
 		// all enemies spawned. no longer grouping!
+		yield return new WaitForSeconds(formationDelay);
 		SetGrouping(false);
-		yield return new WaitForSeconds(groupSpawnDelay);
+		yield return new WaitForSeconds(groupSpawnDelay - formationDelay);
 		hasGroupAssigned = false;
 	}
 
