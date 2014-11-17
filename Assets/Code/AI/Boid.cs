@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 public class Boid : MonoBehaviour 
 {
+
+	// TODO:
+	// Integrate the AIPath into this file. Calculate the paths and combine the velocity for the path direction with the grouping velocity.
+	// find out how to avoid obstacles
 	private static Boid _instance;
 
 	public static Boid instance
