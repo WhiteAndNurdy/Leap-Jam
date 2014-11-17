@@ -55,14 +55,14 @@ public class Boid : MonoBehaviour
 	{
 		foreach (GameObject group in Scanner.instance.GroupSet)
 		{
-			Vector3 v1, v2, v3;
-			CalculateGroupCenterAndVelocity(group, out v1, out v3);
+			Vector3 v1, v2;
+			CalculateGroupCenter(group, out v1);
 			foreach (Transform child in group.transform)
 			{
 				DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
 				v2 = AvoidCollision(child);
 
-				Vector3 dir = (v1 + v2 + v3) - child.position;
+				Vector3 dir = (v1 + v2) - child.position;
 				Vector3 movement = dir.normalized * child.GetComponent<AIPath>().speed * Time.deltaTime;
 				if (movement.sqrMagnitude > dir.sqrMagnitude)
 					movement = dir;
@@ -71,17 +71,15 @@ public class Boid : MonoBehaviour
 		}
 	}
 
-	void CalculateGroupCenterAndVelocity(GameObject group, out Vector3 center, out Vector3 velocity)
+	void CalculateGroupCenter(GameObject group, out Vector3 center)
 	{
 		center = new Vector3();
-		velocity = new Vector3();
 		foreach (Transform child in group.transform)
 		{
 			center += child.position;
-			velocity += child.GetComponent<CharacterController>().velocity;
 		}
 		center /= group.transform.childCount;
-		velocity /= group.transform.childCount;
+
 	}
 
 	Vector3 AvoidCollision(Transform boid)
