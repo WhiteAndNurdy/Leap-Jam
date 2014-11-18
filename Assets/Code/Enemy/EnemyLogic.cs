@@ -68,9 +68,13 @@ public class EnemyLogic : EntityLogic
 		{
 			Debug.Log("Reached Attack");
 			transform.parent.GetComponent<GroupLogic>().MovementState = AIMovementState.Attacking;
-			StopCoroutine("UpdateAIPath");
-			StartCoroutine("MoveInToAttack");
 		}
+	}
+
+	public void SetAttackProperties()
+	{
+		StopCoroutine("UpdateAIPath");
+		StartCoroutine("MoveInToAttack");
 	}
 
 	public void Damage(float amount, Elements type)

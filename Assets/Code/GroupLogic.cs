@@ -14,7 +14,21 @@ public class GroupLogic : MonoBehaviour {
 	public AIMovementState MovementState
 	{
 		get { return m_MovementState; }
-		set { m_MovementState = value; }
+		set 
+		{ 
+			m_MovementState = value;
+			if (value == AIMovementState.Attacking && !m_Attacking)
+			{
+				foreach (Transform child in transform)
+				{
+					if (child.CompareTag("Enemy"))
+						child.GetComponent<EnemyLogic>().SetAttackProperties();
+				}
+				m_Attacking = true;
+				
+			}
+		}
+
 	}
 	public bool Active
 	{
@@ -45,6 +59,7 @@ public class GroupLogic : MonoBehaviour {
 	private AIMovementState m_MovementState;
 	private GameObject m_Tower;
 	private GameObject m_GroupLeader;
+	private bool m_Attacking = false;
 
 	void Awake()
 	{
