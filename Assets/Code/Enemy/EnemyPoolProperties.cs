@@ -120,24 +120,6 @@ public class EnemyPoolProperties : MonoBehaviour {
 			//If I am the first instance, make me the Singleton
 			_instance = this;
 			DontDestroyOnLoad(this.gameObject);
-
-			GameObject container = new GameObject();
-			container.name = "Unclaimed Pooled Objects";
-			DontDestroyOnLoad(container);
-			foreach (var enemy in EnemyPoolEntries)
-			{
-				m_EnemyPoolMap.Add(enemy.Name, new EnemyPool(enemy.Count));
-				GameObject subContainer = new GameObject();
-				subContainer.name = enemy.Name + " Container";
-				subContainer.transform.parent = container.transform;
-				for (int i = 0; i < enemy.Count; ++i)
-				{
-					GameObject newObject = Instantiate(enemy.EnemyPrefab) as GameObject;
-					newObject.name = enemy.Name;
-					newObject.transform.parent = subContainer.transform;
-					m_EnemyPoolMap[enemy.Name].Add(newObject);
-				}
-			}
 		}
 		else
 		{
@@ -145,7 +127,24 @@ public class EnemyPoolProperties : MonoBehaviour {
 			//another reference in scene, destroy it!
 			if (this != _instance)
 				Destroy(this.gameObject);
-			return;
+		}
+
+		GameObject container = new GameObject();
+		container.name = "Unclaimed Pooled Objects";
+		DontDestroyOnLoad(container);
+		foreach (var enemy in EnemyPoolEntries)
+		{
+			m_EnemyPoolMap.Add(enemy.Name, new EnemyPool(enemy.Count));
+			GameObject subContainer = new GameObject();
+			subContainer.name = enemy.Name + " Container";
+			subContainer.transform.parent = container.transform;
+			for (int i = 0; i < enemy.Count; ++i)
+			{
+				GameObject newObject = Instantiate(enemy.EnemyPrefab) as GameObject;
+				newObject.name = enemy.Name;
+				newObject.transform.parent = subContainer.transform;
+				m_EnemyPoolMap[enemy.Name].Add(newObject);
+			}
 		}
 	}
 
