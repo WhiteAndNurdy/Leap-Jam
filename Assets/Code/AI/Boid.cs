@@ -61,7 +61,6 @@ public class Boid : MonoBehaviour
 			CalculateGroupCenter(group, out v1, out v3);
 			if (group.GetComponent<GroupLogic>().MovementState == AIMovementState.Organizing)
 			{
-				Debug.Log("Organizing");
 				foreach (Transform child in group.transform)
 				{
 					Vector3 newV3 = v3;
@@ -71,16 +70,11 @@ public class Boid : MonoBehaviour
 					v2 = AvoidCollision(child);
 
 					Vector3 dir = (v1 + v2 + newV3) - child.position;
-					Vector3 movement = dir.normalized * child.GetComponent<AIPath>().speed;
+					Vector3 movement = dir.normalized * group.GetComponent<AIPath>().speed;
 					if (movement.sqrMagnitude > dir.sqrMagnitude)
 						movement = dir;
 					child.GetComponent<EnemyLogic>().Move(movement);
 				}
-			}
-			else
-			{
-				Debug.Log("Not Organizing");
-				int i = 0;
 			}
 		}
 	}

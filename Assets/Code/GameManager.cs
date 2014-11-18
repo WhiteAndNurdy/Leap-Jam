@@ -55,11 +55,12 @@ public class GameManager : MonoBehaviour
 		{
 			GameObject waveObj = Instantiate(wavePrefab) as GameObject;
 			waveObj.tag = "Wave";
-
+			waveObj.transform.position = Vector3.zero;
 			foreach (var group in wave.groups)
 			{
 				GameObject groupObj = Instantiate(groupPrefab) as GameObject;
 				groupObj.tag = "Group";
+				groupObj.transform.position = Vector3.zero;
 				
 				foreach (var enemy in group.enemies)
 				{
@@ -70,11 +71,11 @@ public class GameManager : MonoBehaviour
 					enemyObj.GetComponent<EnemyProperties>().Shield = enemy.hasShield;
 					enemyObj.GetComponent<EnemyProperties>().EnemyActive = false;
 					enemyObj.GetComponent<EnemyProperties>().EnemySpawned = false;
+					enemyObj.transform.position = Vector3.zero;
 					enemyObj.transform.parent = groupObj.transform;
 				}
 				groupObj.transform.parent = waveObj.transform;
 			}
-
 			waves.Add(waveObj);
 		}
 	}
@@ -104,16 +105,7 @@ public class GameManager : MonoBehaviour
 			{
 				if (!spawner.GetComponent<Spawner>().hasGroupAssigned)
 				{
-					//once an empty spawner is found, no need to look for another one.
-					List<GameObject> enemies = new List<GameObject>();
-					foreach(Transform child in group.GetComponentsInChildren<Transform>())
-					{
-						if (child.tag == "Enemy")
-						{
-							enemies.Add(child.gameObject);
-						}
-					}
-					spawner.GetComponent<Spawner>().AssignGroup(enemies);
+					spawner.GetComponent<Spawner>().AssignGroup(group);
 					break;
 				}
 			}

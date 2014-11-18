@@ -3,12 +3,12 @@ using System.Collections;
 
 public class EnemyPath : AIPath 
 {
-	private EnemyLogic logic;
+	private GroupLogic logic;
 
 	protected override void Awake()
 	{
 		base.Awake();
-		logic = GetComponent<EnemyLogic>();
+		logic = GetComponent<GroupLogic>();
 	}
 
 	public override void Update()
@@ -25,7 +25,7 @@ public class EnemyPath : AIPath
 		}
 		else if (logic != null)
 		{
-			if(transform.parent.GetComponent<GroupLogic>().MovementState == AIMovementState.Moving)
+			if(transform.GetComponent<GroupLogic>().MovementState == AIMovementState.Moving)
 				logic.Move(dir);
 		}
 		else if (controller != null)

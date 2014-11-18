@@ -12,9 +12,6 @@ public class EnemyProperties : EntityProperties {
 		set
 		{
 			m_EnemyActive = value;
-			gameObject.GetComponent<Seeker>().enabled = value;
-			if(value)
-				gameObject.GetComponent<EnemyLogic>().InitializePath();
 		}
 	}
 	public bool EnemySpawned { get; set; }

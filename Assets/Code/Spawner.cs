@@ -45,7 +45,7 @@ public class Spawner : MonoBehaviour
 
 	}
 
-	public void AssignGroup(List<GameObject> enemies)
+	public void AssignGroup(GameObject group)
 	{
 		if (hasGroupAssigned)
 		{
@@ -53,15 +53,13 @@ public class Spawner : MonoBehaviour
 		}
 
 		hasGroupAssigned = true;
+		group.transform.position = transform.position;
 		enemyList.Clear();
-		foreach (var enemy in enemies)
+		foreach (Transform enemy in group.transform)
 		{
-			enemyList.Add(enemy);
+			enemyList.Add(enemy.gameObject);
 		}
-		if (enemyList.Count > 0)
-		{
-			enemyList[0].transform.parent.GetComponent<GroupLogic>().MovementState = AIMovementState.Organizing;
-		}
+		group.GetComponent<GroupLogic>().MovementState = AIMovementState.Organizing;
 		enemiesSpawned = 0;
 		SetGrouping(true);
 		StartCoroutine("CheckEnemySpawn");
@@ -82,7 +80,7 @@ public class Spawner : MonoBehaviour
 		while (grouping)
 		{
 			Vector3 dir = transform.FindChild("GroupPoint").position - enemy.transform.position;
-			Vector3 movement = dir.normalized * enemy.GetComponent<AIPath>().speed;
+			Vector3 movement = dir.normalized * enemy.transform.parent.GetComponent<AIPath>().speed;
 			if (movement.magnitude > dir.magnitude)
 				movement = dir;
 			enemy.GetComponent<EnemyLogic>().Move(movement);
@@ -95,10 +93,9 @@ public class Spawner : MonoBehaviour
 		grouping = val;
 		if(!grouping)
 		{
-			foreach (var enemy in enemyList)
+			if (enemyList.Count > 0)
 			{
-				enemy.GetComponent<EnemyProperties>().EnemyActive = true;
-				enemy.transform.parent.GetComponent<GroupLogic>().MovementState = AIMovementState.Moving;
+				enemyList[0].transform.parent.GetComponent<GroupLogic>().Active = true; 
 			}
 		}
 	}
