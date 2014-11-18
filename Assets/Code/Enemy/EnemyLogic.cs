@@ -121,4 +121,9 @@ public class EnemyLogic : EntityLogic
 	{
 		return !m_Ungrouped;
 	}
+
+	public void SetTowerObject(GameObject tower)
+	{
+		m_Tower = tower;
+	}
 }

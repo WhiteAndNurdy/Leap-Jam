@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using System;
@@ -8,154 +7,102 @@ public enum GameState
 {
 	Tutorial,
 	Preparation,
-	Waves,
+	Wave,
 	GameOver
 }
 
 public class GameManager : MonoBehaviour 
 {
 	public GameState currentGameState;
+	public bool skipTutorial = false;
 
-	public List<GameObject> waves;
-	public GameObject wavePrefab;
-	public GameObject groupPrefab;
-	public GameObject enemyPrefab;
+	private static GameManager _instance;
 
-	public float waveDelay = 10.0f;
+	public static GameManager instance
+	{
+		get
+		{
+			if (_instance == null)
+			{
+				_instance = GameObject.FindObjectOfType<GameManager>();
 
-	//File pulled from resources
-	private LevelFromXML levelFromXML;
-	private int currentWave = 0;
-	private bool waveEnded = true;
+				//Tell unity not to destroy this object when loading a new scene!
+				DontDestroyOnLoad(_instance.gameObject);
+			}
+
+			return _instance;
+		}
+	}
+
+	void Awake()
+	{
+		if (_instance == null)
+		{
+			//If I am the first instance, make me the Singleton
+			_instance = this;
+			DontDestroyOnLoad(this);
+		}
+		else
+		{
+			//If a Singleton already exists and you find
+			//another reference in scene, destroy it!
+			if (this != _instance)
+				Destroy(this.gameObject);
+			return;
+		}
+		
+	}
 
 	void Start () 
 	{
-		waves = new List<GameObject>();
+		
+	}
 
-		levelFromXML = Utilities.LoadLevelFile("LevelX");
-		CreateLevelFromXML();
-		InitializeScanner();
+	public void StartTutorial()
+	{
+		currentGameState = GameState.Tutorial;
+		Application.LoadLevel("Tutorial");
+	}
 
-		AddWaveToSpawners(currentWave);
-		StartCoroutine("CheckIfWaveEnded");
+	public void SplashScreenFadeInComplete(string name)
+	{
+		
+	}
+
+	public void SplashScreenFadeOutComplete(string name)
+	{
+		if (String.Compare(name, "startSplash") == 0)
+		{
+			StartCoroutine("StartSplashComplete");
+		}
+	}
+
+	IEnumerator StartSplashComplete()
+	{
+		if (PlayerPrefs.GetInt("CompletedTutorial") == 0 && !skipTutorial)
+		{
+			StartTutorial();
+		}
+		else
+		{
+			StartPreparation();
+		}
+		return null;
+	}
+
+	public void StartPreparation()
+	{
+		currentGameState = GameState.Preparation;
+		LoadingScreen.show();
+		Application.LoadLevel("Level01");
 	}
 
 	void Update()
 	{
-		CheckIfWaveEnded();
-		if (waveEnded)
-		{
-			StartNextWave();
-		}
+
 	}
 
-	private void CreateLevelFromXML() 
-	{
-		foreach (var wave in levelFromXML.waves)
-		{
-			GameObject waveObj = Instantiate(wavePrefab) as GameObject;
-			waveObj.tag = "Wave";
-			waveObj.transform.position = Vector3.zero;
-			foreach (var group in wave.groups)
-			{
-				GameObject groupObj = Instantiate(groupPrefab) as GameObject;
-				groupObj.tag = "Group";
-				groupObj.transform.position = Vector3.zero;
-				
-				foreach (var enemy in group.enemies)
-				{
-					GameObject enemyObj = EnemyPoolProperties.instance.GetEnemyWithName(enemy.type);
-					DebugUtils.Assert(enemyObj != null, "Unknown enemy type: " + enemy.type + " make sure this matches with the pool.");
-					//enemyObj.GetComponent<EnemyProperties>().type = enemy.type;
-					enemyObj.GetComponent<EnemyProperties>().HealthPoints = enemy.health;
-					enemyObj.GetComponent<EnemyProperties>().Shield = enemy.hasShield;
-					enemyObj.GetComponent<EnemyProperties>().EnemyActive = false;
-					enemyObj.GetComponent<EnemyProperties>().EnemySpawned = false;
-					enemyObj.transform.position = Vector3.zero;
-					enemyObj.transform.parent = groupObj.transform;
-				}
-				groupObj.transform.parent = waveObj.transform;
-			}
-			waves.Add(waveObj);
-		}
-	}
-
-	private void InitializeScanner()
-	{
-		Scanner.instance.Initialize();
-	}
-
-	private void AddWaveToSpawners(int currentWaveIndex)
-	{
-		var spawners = GameObject.FindGameObjectsWithTag("Spawner");
-		var currentWave = waves[currentWaveIndex];
-
-		List<GameObject> groups = new List<GameObject>();
-		foreach (Transform child in currentWave.GetComponentsInChildren<Transform>())
-		{
-			if (child.tag == "Group")
-			{
-				groups.Add(child.gameObject);
-			}
-		}
-
-		foreach (var group in groups)
-		{           
-			foreach(var spawner in spawners)
-			{
-				if (!spawner.GetComponent<Spawner>().hasGroupAssigned)
-				{
-					spawner.GetComponent<Spawner>().AssignGroup(group);
-					break;
-				}
-			}
-		}
-	}
-
-	private IEnumerator CheckIfWaveEnded()
-	{
-		while (true)
-		{
-			var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-			waveEnded = false;
-			bool enemyActive = false;
-
-			if (enemies != null)
-			{
-				foreach (var enemy in enemies)
-				{
-					if (enemy.GetComponent<EnemyProperties>().EnemySpawned)
-					{
-						enemyActive = true;
-						break;
-					}
-				}
-			}
-
-			if (!enemyActive)
-			{
-				yield return new WaitForSeconds(waveDelay);
-				waveEnded = true;
-			}
-			yield return null;
-		}
-	}
-
-	private void StartNextWave()
-	{
-		++currentWave;
-		if (currentWave >= waves.Count)
-		{
-			EndLevel(true);
-			return;
-		}
-		else
-		{
-			AddWaveToSpawners(currentWave);
-		}
-	}
-
-	private void EndLevel(bool hasWon)
+	public void EndLevel(bool hasWon)
 	{
 		//Disable controls
 		//Open victory/defeat screen

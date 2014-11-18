@@ -56,4 +56,9 @@ public class EnemyProperties : EntityProperties {
 	{
 		return VulnerableToUnique.Contains(type);
 	}
+
+	public void SetTowerObject(GameObject tower)
+	{
+		m_Tower = tower;
+	}
 }

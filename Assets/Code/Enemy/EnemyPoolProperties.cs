@@ -119,7 +119,25 @@ public class EnemyPoolProperties : MonoBehaviour {
 		{
 			//If I am the first instance, make me the Singleton
 			_instance = this;
-			DontDestroyOnLoad(this);
+			DontDestroyOnLoad(this.gameObject);
+
+			GameObject container = new GameObject();
+			container.name = "Unclaimed Pooled Objects";
+			DontDestroyOnLoad(container);
+			foreach (var enemy in EnemyPoolEntries)
+			{
+				m_EnemyPoolMap.Add(enemy.Name, new EnemyPool(enemy.Count));
+				GameObject subContainer = new GameObject();
+				subContainer.name = enemy.Name + " Container";
+				subContainer.transform.parent = container.transform;
+				for (int i = 0; i < enemy.Count; ++i)
+				{
+					GameObject newObject = Instantiate(enemy.EnemyPrefab) as GameObject;
+					newObject.name = enemy.Name;
+					newObject.transform.parent = subContainer.transform;
+					m_EnemyPoolMap[enemy.Name].Add(newObject);
+				}
+			}
 		}
 		else
 		{
@@ -128,23 +146,6 @@ public class EnemyPoolProperties : MonoBehaviour {
 			if (this != _instance)
 				Destroy(this.gameObject);
 			return;
-		}
-
-		GameObject container = new GameObject();
-		container.name = "Unclaimed Pooled Objects";
-		foreach (var enemy in EnemyPoolEntries)
-		{
-			m_EnemyPoolMap.Add(enemy.Name, new EnemyPool(enemy.Count));
-			GameObject subContainer = new GameObject();
-			subContainer.name = enemy.Name + " Container";
-			subContainer.transform.parent = container.transform;
-			for (int i = 0; i < enemy.Count; ++i)
-			{
-				GameObject newObject = Instantiate(enemy.EnemyPrefab) as GameObject;
-				newObject.name = enemy.Name;
-				newObject.transform.parent = subContainer.transform;
-				m_EnemyPoolMap[enemy.Name].Add(newObject);
-			}
 		}
 	}
 
@@ -183,5 +184,17 @@ public class EnemyPoolProperties : MonoBehaviour {
 			enemy.transform.parent = m_EnemyPoolMap[enemy.name].GetFirstPooled().transform.parent;
 
 		m_EnemyPoolMap[enemy.name].AddItemToPool(enemy);
+	}
+
+	public void SetTowerForAllEnemies(GameObject tower)
+	{
+		foreach (var pair in m_EnemyPoolMap)
+		{
+			for(int i = 0; i < pair.Value.TotalCount; ++i)
+			{
+				pair.Value.At(i).GetComponent<EnemyProperties>().SetTowerObject(tower);
+				pair.Value.At(i).GetComponent<EnemyLogic>().SetTowerObject(tower);
+			}
+		}
 	}
 }
