@@ -57,32 +57,33 @@ public class Boid : MonoBehaviour
 	{
 		foreach (GameObject group in Scanner.instance.GroupSet)
 		{
-			Vector3 v1, v2, v3;
-			CalculateGroupCenter(group, out v1, out v3);
-			if (group.GetComponent<GroupLogic>().MovementState == AIMovementState.Organizing)
+			Vector3 v1, v2;
+			CalculateGroupCenter(group, out v1);
+			if (group.GetComponent<GroupLogic>().MovementState != AIMovementState.Attacking)
 			{
+				GameObject groupLeader = group.transform.FindChild("GroupLeader").gameObject;
 				foreach (Transform child in group.transform)
 				{
-					Vector3 newV3 = v3;
-					newV3 -= child.GetComponent<CharacterController>().velocity;
-					newV3.Normalize();
-					DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
-					v2 = AvoidCollision(child);
+					if (child.CompareTag("Enemy"))
+					{
+						DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
+						v2 = AvoidCollision(child);
 
-					Vector3 dir = (v1 + v2 + newV3) - child.position;
-					Vector3 movement = dir.normalized * group.GetComponent<AIPath>().speed;
-					if (movement.sqrMagnitude > dir.sqrMagnitude)
-						movement = dir;
-					child.GetComponent<EnemyLogic>().Move(movement);
+						Vector3 dir = (v1 + v2) - child.position;
+						Vector3 movement = dir.normalized * groupLeader.GetComponent<EnemyPath>().speed;
+						if (movement.sqrMagnitude > dir.sqrMagnitude)
+							movement = dir;
+						child.GetComponent<EnemyLogic>().Move(movement);
+					}
 				}
 			}
 		}
 	}
 
-	void CalculateGroupCenter(GameObject group, out Vector3 center, out Vector3 velocity)
+	void CalculateGroupCenter(GameObject group, out Vector3 center)
 	{
 		center = group.GetComponent<GroupLogic>().Center();
-		velocity = group.GetComponent<GroupLogic>().Velocity();
+		//velocity = group.GetComponent<GroupLogic>().Velocity();
 	}
 
 	Vector3 AvoidCollision(Transform boid)

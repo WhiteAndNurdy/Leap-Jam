@@ -8,13 +8,14 @@ public class EnemyPath : AIPath
 	protected override void Awake()
 	{
 		base.Awake();
-		logic = GetComponent<GroupLogic>();
+		logic = transform.parent.GetComponent<GroupLogic>();
 	}
 
 	public override void Update()
 	{
 		if (!canMove) { return; }
 
+		if (logic != null && logic.MovementState != AIMovementState.Moving) { return; }
 		Vector3 dir = CalculateVelocity(GetFeetPosition());
 
 		//Rotate towards targetDirection (filled in by CalculateVelocity)
@@ -22,11 +23,6 @@ public class EnemyPath : AIPath
 
 		if (navController != null)
 		{
-		}
-		else if (logic != null)
-		{
-			if(transform.GetComponent<GroupLogic>().MovementState == AIMovementState.Moving)
-				logic.Move(dir);
 		}
 		else if (controller != null)
 		{

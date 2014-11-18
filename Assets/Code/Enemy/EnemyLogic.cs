@@ -39,22 +39,17 @@ public class EnemyLogic : EntityLogic
 
 
 	IEnumerator MoveInToAttack()
-	{/*
-		m_Path.enabled = false;
-		if (GetComponent<Seeker>() != null)
-		{
-			GetComponent<Seeker>().enabled = false;
-		}
+	{
 		while (MovingTowardsTower)
 		{
 			Vector3 dir = m_Tower.transform.position - transform.position;
-			Vector3 movement = dir.normalized * m_Path.speed;
+			Vector3 movement = dir.normalized * transform.parent.FindChild("GroupLeader").GetComponent<EnemyPath>().speed;
 			if (movement.sqrMagnitude > dir.sqrMagnitude)
 				movement = dir;
 			Move(movement);
 			yield return null;
 		}
-		StartCoroutine("CheckForAttack");*/
+		StartCoroutine("CheckForAttack");
 		yield return null;
 	}
 
@@ -72,6 +67,7 @@ public class EnemyLogic : EntityLogic
 		if (m_EnemyProperties.EnemyActive)
 		{
 			Debug.Log("Reached Attack");
+			transform.parent.GetComponent<GroupLogic>().MovementState = AIMovementState.Attacking;
 			StopCoroutine("UpdateAIPath");
 			StartCoroutine("MoveInToAttack");
 		}

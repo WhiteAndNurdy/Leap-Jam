@@ -23,7 +23,6 @@ public class Spawner : MonoBehaviour
 
 	void Start () 
 	{
-		
 	}
 
 	IEnumerator CheckEnemySpawn()
@@ -53,11 +52,12 @@ public class Spawner : MonoBehaviour
 		}
 
 		hasGroupAssigned = true;
-		group.transform.position = transform.position;
+		group.transform.position = transform.FindChild("GroupPoint").position;
 		enemyList.Clear();
 		foreach (Transform enemy in group.transform)
 		{
-			enemyList.Add(enemy.gameObject);
+			if(enemy.CompareTag("Enemy"))
+				enemyList.Add(enemy.gameObject);
 		}
 		group.GetComponent<GroupLogic>().MovementState = AIMovementState.Organizing;
 		enemiesSpawned = 0;
@@ -68,24 +68,12 @@ public class Spawner : MonoBehaviour
 	private void SpawnEnemy()
 	{
 		Vector3 enemyPosition = transform.position;
+		enemyPosition.x += UnityEngine.Random.Range(-2, 2);
 		enemyPosition.y += enemyList[enemiesSpawned].GetComponent<CharacterController>().height;
+		enemyPosition.z += UnityEngine.Random.Range(-2, 2);
 		enemyList[enemiesSpawned].transform.position = enemyPosition;
 		enemyList[enemiesSpawned].GetComponent<EnemyProperties>().EnemySpawned = true;
-		StartCoroutine(MoveEnemyToGroupPoint(enemyList[enemiesSpawned]));
 		++enemiesSpawned;
-	}
-
-	IEnumerator MoveEnemyToGroupPoint(GameObject enemy)
-	{
-		while (grouping)
-		{
-			Vector3 dir = transform.FindChild("GroupPoint").position - enemy.transform.position;
-			Vector3 movement = dir.normalized * enemy.transform.parent.GetComponent<AIPath>().speed;
-			if (movement.magnitude > dir.magnitude)
-				movement = dir;
-			enemy.GetComponent<EnemyLogic>().Move(movement);
-			yield return null;
-		}
 	}
 
 	void SetGrouping(bool val)

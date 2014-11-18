@@ -5,7 +5,8 @@ public enum AIMovementState
 {
 	Idle,
 	Organizing,
-	Moving
+	Moving,
+	Attacking
 }
 
 public class GroupLogic : MonoBehaviour {
@@ -25,11 +26,15 @@ public class GroupLogic : MonoBehaviour {
 			{
 				Initialize();
 			}
-			GetComponent<EnemyPath>().enabled = value;
-			GetComponent<Seeker>().enabled = value;
 			foreach (Transform child in transform)
 			{
-				child.GetComponent<EnemyProperties>().EnemyActive = value;
+				if (child.CompareTag("Enemy"))
+					child.GetComponent<EnemyProperties>().EnemyActive = value;
+				else
+				{
+					child.GetComponent<EnemyPath>().enabled = value;
+					child.GetComponent<Seeker>().enabled = value;
+				}
 			}
 		}
 	}
@@ -37,20 +42,21 @@ public class GroupLogic : MonoBehaviour {
 
 
 	private bool m_Active;
-	private EnemyPath m_Path;
 	private AIMovementState m_MovementState;
 	private GameObject m_Tower;
+	private GameObject m_GroupLeader;
 
 	void Awake()
 	{
 		MovementState = AIMovementState.Idle;
-		m_Path = GetComponent<EnemyPath>();
 		m_Tower = GameObject.FindGameObjectWithTag("Tower");
+		m_GroupLeader = transform.FindChild("GroupLeader").gameObject;
 	}
 
 	void Start()
 	{
 		DebugUtils.Assert(m_Tower != null, "Tower object not found!");
+		DebugUtils.Assert(m_GroupLeader != null, "Couldn't find group leader!");
 	}
 
 	void Initialize()
@@ -61,6 +67,7 @@ public class GroupLogic : MonoBehaviour {
 
 	void Update()
 	{
+		//transform.localPosition = m_GroupLeader.transform.position;
 	}
 
 	IEnumerator UpdateAIPath()
@@ -69,7 +76,8 @@ public class GroupLogic : MonoBehaviour {
 		{
 			if (Active)
 			{
-				m_Path.target = GetClosestTarget();
+				//m_GroupLeader.transform.position = EnemyCenter();
+				m_GroupLeader.GetComponent<EnemyPath>().target = GetClosestTarget();
 			}
 			yield return new WaitForSeconds(ReassignTargetRate);
 		}
@@ -95,10 +103,16 @@ public class GroupLogic : MonoBehaviour {
 
 	public Vector3 Center()
 	{
+		return transform.FindChild("GroupLeader").position;
+	}
+
+	Vector3 EnemyCenter()
+	{
 		Vector3 center = new Vector3();
 		foreach (Transform child in transform)
 		{
-			center += child.position;
+			if (child.CompareTag("Enemy"))
+				center += child.transform.position;
 		}
 		center /= transform.childCount;
 		return center;
@@ -109,7 +123,8 @@ public class GroupLogic : MonoBehaviour {
 		Vector3 velocity = new Vector3();
 		foreach (Transform child in transform)
 		{
-			velocity += child.GetComponent<CharacterController>().velocity;
+			if(child.CompareTag("Enemy"))
+				velocity += child.GetComponent<CharacterController>().velocity;
 		}
 		velocity /= transform.childCount;
 		return velocity;
