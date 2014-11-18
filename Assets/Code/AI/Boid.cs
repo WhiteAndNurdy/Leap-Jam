@@ -6,6 +6,9 @@ public class Boid : MonoBehaviour
 {
 	// if for 5 frames, all boids in a group have'nt moved more than X, they have formed!
 
+	public LayerMask EnemyCollisoinMask;
+	public float UngroupCheckInterval = 0.5f;
+
 	private static Boid _instance;
 
 	public static Boid instance
@@ -45,7 +48,42 @@ public class Boid : MonoBehaviour
 	
 	void Start () 
 	{
+		StartCoroutine("CheckIfStillGrouped");
+	}
 
+	IEnumerator CheckIfStillGrouped()
+	{
+		while (true)
+		{
+			foreach (GameObject group in Scanner.instance.GroupSet)
+			{
+				foreach (Transform child in group.transform)
+				{
+					if (child.CompareTag("Enemy"))
+					{
+						EnemyLogic logic = child.GetComponent<EnemyLogic>();
+						if (logic.IsGrouped() && child.GetComponent<EnemyProperties>().EnemyActive)
+						{
+							Collider[] neighbors = Physics.OverlapSphere(child.position, logic.UngroupRange, EnemyCollisoinMask);
+							bool ungrouped = true;
+							foreach (Collider neighbor in neighbors)
+							{
+								if (neighbor.gameObject != child.gameObject && neighbor.CompareTag("Enemy"))
+								{
+									ungrouped = false;
+								}
+							}
+							if (ungrouped)
+							{
+								Debug.Log("ungrouped enemy");
+								logic.Ungroup();
+							}
+						}
+					}
+				}
+			}
+			yield return new WaitForSeconds(UngroupCheckInterval);
+		}
 	}
 
 	void Update()
@@ -66,14 +104,17 @@ public class Boid : MonoBehaviour
 				{
 					if (child.CompareTag("Enemy"))
 					{
-						DebugUtils.Assert(child.CompareTag("Enemy"), "Boids tried to group an object that is not an enemy!");
-						v2 = AvoidCollision(child);
+						EnemyLogic logic = child.GetComponent<EnemyLogic>();
+						if (logic.IsGrouped())
+						{
+							v2 = AvoidCollision(child);
 
-						Vector3 dir = (v1 + v2) - child.position;
-						Vector3 movement = dir.normalized * groupLeader.GetComponent<GroupPath>().speed;
-						if (movement.sqrMagnitude > dir.sqrMagnitude)
-							movement = dir;
-						child.GetComponent<EnemyLogic>().Move(movement);
+							Vector3 dir = (v1 + v2) - child.position;
+							Vector3 movement = dir.normalized * groupLeader.GetComponent<GroupPath>().speed;
+							if (movement.sqrMagnitude > dir.sqrMagnitude)
+								movement = dir;
+							logic.Move(movement);
+						}
 					}
 				}
 			}

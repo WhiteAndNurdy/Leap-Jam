@@ -6,12 +6,15 @@ using System.Collections;
 public class EnemyLogic : EntityLogic
 {
 	public bool MovingTowardsTower = true;
+	public float UngroupRange = 1.0f;
 
 	private EnemyProperties m_EnemyProperties;
 	private GameObject m_Shield;
 	private CharacterController m_Controller; 
 	private Vector3 m_TotalFrameMovement;
 	private GameObject m_Tower;
+	private bool m_Ungrouped = false;
+
 
 	void Awake()
 	{
@@ -107,5 +110,15 @@ public class EnemyLogic : EntityLogic
 	public void Move(Vector3 amount)
 	{
 		m_TotalFrameMovement += amount;
+	}
+
+	public void Ungroup()
+	{
+		m_Ungrouped = true;
+	}
+
+	public bool IsGrouped()
+	{
+		return !m_Ungrouped;
 	}
 }

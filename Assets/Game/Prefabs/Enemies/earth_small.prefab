@@ -49,7 +49,7 @@ GameObject:
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400008}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: earth_small
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -193,6 +193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovingTowardsTower: 1
+  UngroupRange: 2
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
