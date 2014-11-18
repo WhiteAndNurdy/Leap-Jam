@@ -70,7 +70,7 @@ public class Boid : MonoBehaviour
 						v2 = AvoidCollision(child);
 
 						Vector3 dir = (v1 + v2) - child.position;
-						Vector3 movement = dir.normalized * groupLeader.GetComponent<EnemyPath>().speed;
+						Vector3 movement = dir.normalized * groupLeader.GetComponent<GroupPath>().speed;
 						if (movement.sqrMagnitude > dir.sqrMagnitude)
 							movement = dir;
 						child.GetComponent<EnemyLogic>().Move(movement);

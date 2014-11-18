@@ -8,6 +8,10 @@
 				<Enemy type = "fire_small" health = "150" hasShield = "false"/>
 				<Enemy type = "fire_small" health = "200" hasShield = "false"/>
 				<Enemy type = "fire_small" health = "250" hasShield = "false"/>
+        <Enemy type = "fire_small" health = "100" hasShield = "false"/>
+        <Enemy type = "fire_small" health = "150" hasShield = "false"/>
+        <Enemy type = "fire_small" health = "200" hasShield = "false"/>
+        <Enemy type = "fire_small" health = "250" hasShield = "false"/>
 			</Group>
 			<Group>
 				<Enemy type = "water_small" health = "150" hasShield = "false"/>

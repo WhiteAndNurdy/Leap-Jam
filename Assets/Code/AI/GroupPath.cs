@@ -1,23 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyPath : AIPath 
+public class GroupPath : AIPath 
 {
-	private EnemyLogic logic;
+	private GroupLogic logic;
 
 	protected override void Awake()
 	{
 		base.Awake();
-		logic = GetComponent<EnemyLogic>();
+		logic = transform.parent.GetComponent<GroupLogic>();
 	}
 
 	public override void Update()
 	{
 		if (!canMove) { return; }
 
-		GroupLogic groupLogic = transform.parent.GetComponent<GroupLogic>();
-
-		if (groupLogic != null && groupLogic.MovementState != AIMovementState.Moving) { return; }
+		if (logic != null && logic.MovementState != AIMovementState.Moving) { return; }
 		Vector3 dir = CalculateVelocity(GetFeetPosition());
 
 		//Rotate towards targetDirection (filled in by CalculateVelocity)
@@ -25,10 +23,6 @@ public class EnemyPath : AIPath
 
 		if (navController != null)
 		{
-		}
-		else if (logic != null)
-		{
-			logic.Move(dir);
 		}
 		else if (controller != null)
 		{

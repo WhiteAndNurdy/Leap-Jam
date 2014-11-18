@@ -46,7 +46,7 @@ public class GroupLogic : MonoBehaviour {
 					child.GetComponent<EnemyProperties>().EnemyActive = value;
 				else
 				{
-					child.GetComponent<EnemyPath>().enabled = value;
+					child.GetComponent<GroupPath>().enabled = value;
 					child.GetComponent<Seeker>().enabled = value;
 				}
 			}
@@ -87,12 +87,19 @@ public class GroupLogic : MonoBehaviour {
 
 	IEnumerator UpdateAIPath()
 	{
+		Vector3 closestTarget = new Vector3();
 		while (true)
 		{
+			closestTarget = GetClosestTarget();
 			if (Active)
 			{
 				//m_GroupLeader.transform.position = EnemyCenter();
-				m_GroupLeader.GetComponent<EnemyPath>().target = GetClosestTarget();
+				m_GroupLeader.GetComponent<GroupPath>().target = closestTarget;
+				foreach (Transform child in transform)
+				{
+					if (child.CompareTag("Enemy"))
+						child.GetComponent<EnemyPath>().target = closestTarget;
+				}
 			}
 			yield return new WaitForSeconds(ReassignTargetRate);
 		}

@@ -43,7 +43,7 @@ public class EnemyLogic : EntityLogic
 		while (MovingTowardsTower)
 		{
 			Vector3 dir = m_Tower.transform.position - transform.position;
-			Vector3 movement = dir.normalized * transform.parent.FindChild("GroupLeader").GetComponent<EnemyPath>().speed;
+			Vector3 movement = dir.normalized * transform.parent.FindChild("GroupLeader").GetComponent<GroupPath>().speed;
 			if (movement.sqrMagnitude > dir.sqrMagnitude)
 				movement = dir;
 			Move(movement);
