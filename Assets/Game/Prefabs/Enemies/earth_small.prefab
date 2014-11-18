@@ -47,7 +47,6 @@ GameObject:
   - 114: {fileID: 11400008}
   - 143: {fileID: 14300000}
   - 114: {fileID: 11400004}
-  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: earth_small
   m_TagString: Enemy
@@ -176,30 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d885801dd9dec2b479939aa73822717b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ReassignTargetRate: .800000012
   MovingTowardsTower: 1
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 765214d73385c7d4bb258b9c7164c8c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  repathRate: 1
-  target: {x: 0, y: 0, z: 0}
-  canSearch: 1
-  canMove: 1
-  speed: 3
-  turningSpeed: 5
-  slowdownDistance: .600000024
-  pickNextWaypointDist: 2
-  forwardLook: 1
-  endReachedDistance: .200000003
-  closestOnPathCheck: 1
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
