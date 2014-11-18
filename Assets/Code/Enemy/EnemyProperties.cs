@@ -14,7 +14,16 @@ public class EnemyProperties : EntityProperties {
 			m_EnemyActive = value;
 		}
 	}
-	public bool EnemySpawned { get; set; }
+	public bool EnemySpawned 
+	{
+		get { return m_EnemySpawned; } 
+		set
+		{
+			m_EnemySpawned = value;
+			renderer.enabled = value;
+			transform.FindChild("Healthbar").gameObject.SetActive(value);
+		} 
+	}
 
 	public float DamageAmount;
 	public float TimeBetweenAttacks;
@@ -23,11 +32,13 @@ public class EnemyProperties : EntityProperties {
 	private GameObject m_Tower;
 	private HashSet<Elements> VulnerableToUnique = new HashSet<Elements>();
 	private bool m_EnemyActive;
+	private bool m_EnemySpawned;
 
 	void Awake()
 	{
 		m_Tower = GameObject.FindGameObjectWithTag("Tower");
 		EnemyActive = false;
+		EnemySpawned = false;
 	}
 
 	// Use this for initialization
