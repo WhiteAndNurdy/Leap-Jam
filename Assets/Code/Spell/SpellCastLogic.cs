@@ -84,7 +84,7 @@ public class SpellCastLogic : MonoBehaviour
 	{
 		while (true)
 		{
-			m_CachedAimPosition = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth/2.0f, Camera.main.pixelHeight/2.0f));
+			m_CachedAimPosition.z = -10000;
 			m_Aiming = false;
 			if (m_LeapController.Frame().Hands.Count == 1 && m_LeapController.Frame().Hands[0].IsLeft)
 			{
@@ -326,7 +326,9 @@ public class SpellCastLogic : MonoBehaviour
 
 	public Vector3 GetAimScreenPosition()
 	{
-		return Camera.main.WorldToScreenPoint(m_CachedAimPosition);
+		Vector3 returnValue = Camera.main.WorldToScreenPoint(m_CachedAimPosition);
+		returnValue.z = m_CachedAimPosition.z;
+		return returnValue;
 	}
 
 	Elements GetCastingType()

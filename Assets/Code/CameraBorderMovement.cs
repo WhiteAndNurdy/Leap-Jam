@@ -29,6 +29,10 @@ public class CameraBorderMovement : MonoBehaviour
 	void Update () 
 	{
 		Vector3 aimPos = spellCastLogic.GetAimScreenPosition();
+		if (aimPos.z == -10000)
+		{
+			return;
+		}
 		var mouseX = aimPos.x;
 		var mouseY = aimPos.y;
 		float speedMultiplier = 0.0f;
