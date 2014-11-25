@@ -4611,7 +4611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   horizontalBorderTriggerPercentage: .100000001
-  verticalBorderTriggerPercentage: .100000001
+  verticalBorderTriggerPercentage: .200000003
   maxSpeed: 20
   maxLeftCameraPos: -50
   maxRightCameraPos: 50

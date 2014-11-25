@@ -45,6 +45,8 @@ public class SpellCastLogic : MonoBehaviour
 	Vector m_AirGestureStartPosition;
 	Vector m_WaterGestureStartPosition;
 	Vector m_EarthGestureStartPosition;
+
+	Vector3 m_CachedAimPosition;
 	
 
 	void Awake()
@@ -82,6 +84,7 @@ public class SpellCastLogic : MonoBehaviour
 	{
 		while (true)
 		{
+			m_CachedAimPosition = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth/2.0f, Camera.main.pixelHeight/2.0f));
 			m_Aiming = false;
 			if (m_LeapController.Frame().Hands.Count == 1 && m_LeapController.Frame().Hands[0].IsLeft)
 			{
@@ -315,9 +318,15 @@ public class SpellCastLogic : MonoBehaviour
 			{
 				Debug.DrawLine(palmPosition, hit.point);
 				m_AimIndicator.transform.position = hit.point;
+				m_CachedAimPosition = hit.point;
 				m_AimIndicator.SetActive(true);
 			}
 		}
+	}
+
+	public Vector3 GetAimScreenPosition()
+	{
+		return Camera.main.WorldToScreenPoint(m_CachedAimPosition);
 	}
 
 	Elements GetCastingType()
