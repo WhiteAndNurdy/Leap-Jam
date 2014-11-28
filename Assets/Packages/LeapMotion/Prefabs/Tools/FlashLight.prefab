@@ -505,9 +505,9 @@ Light:
   m_SpotAngle: 68
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
-    m_Strength: 1
+    m_Strength: .870999992
     m_Bias: .0500000007
     m_Softness: 4
     m_SoftnessFade: 1
