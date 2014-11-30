@@ -329,6 +329,13 @@ public class HandController : MonoBehaviour {
     recorder_.Pause();
   }
 
+  public void LoadNewRecording(TextAsset recording)
+  {
+	  recordingAsset = recording;
+	  StopRecording();
+	  recorder_.Load(recordingAsset);
+  }
+
   public string FinishAndSaveRecording() {
     string path = recorder_.SaveToNewFile();
     recorder_.Play();
