@@ -14,7 +14,11 @@ public enum GameState
 public class GameManager : MonoBehaviour 
 {
 	public GameState currentGameState;
+
+#if UNITY_EDITOR
 	public bool skipTutorial = false;
+	public bool resetPlayerPrefs = false;
+#endif
 
 	private static GameManager _instance;
 
@@ -55,11 +59,23 @@ public class GameManager : MonoBehaviour
 
 	void Start () 
 	{
-		
+#if UNITY_EDITOR
+		if (resetPlayerPrefs)
+		{
+			PlayerPrefs.DeleteAll();
+		}
+#endif
 	}
 
 	public void StartTutorial()
 	{
+#if UNITY_EDITOR
+		if (skipTutorial)
+		{
+			StartPreparation();
+			return;
+		}
+#endif
 		currentGameState = GameState.Tutorial;
 		Application.LoadLevel("Tutorial");
 	}
@@ -79,7 +95,7 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator StartSplashComplete()
 	{
-		if (PlayerPrefs.GetInt("CompletedTutorial") == 0 && !skipTutorial)
+		if (PlayerPrefs.GetInt("CompletedTutorial") == 0)
 		{
 			StartTutorial();
 		}

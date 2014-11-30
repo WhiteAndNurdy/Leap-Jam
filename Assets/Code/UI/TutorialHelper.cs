@@ -12,21 +12,20 @@ enum TutorialState
 	Water,
 	Earth,
 	Fire,
-	Finished,
-	End
+	Finished
 }
 
 public class TutorialHelper : MonoBehaviour {
 
 	private string text;
-	private GUIText guiText;
+	private GUIText textObject;
 	private TutorialState state;
 	private HandController handController;
 
 
 	void Awake()
 	{
-		guiText = GetComponent<GUIText>();
+		textObject = GetComponent<GUIText>();
 		state = TutorialState.Start;
 		handController = GameObject.Find("RECORDEDCONTROLLER").GetComponent<HandController>();
 		handController.recordingAsset = null;
@@ -49,15 +48,18 @@ public class TutorialHelper : MonoBehaviour {
 
 	void Next()
 	{
-		if(state == TutorialState.End)
+		if (state == TutorialState.Finished)
 		{
+			End();
 			return;
 		}
 		state++;
 		switch (state)
 		{
 			case TutorialState.Intro:
-				text = "Welcome to the tutorial. Press Return to go to the next step in the tutorial.";
+				text = "Welcome to the tutorial.";
+				text += "\nTry to follow the movements with your hand as shown in the following steps";
+				text += "\nPress Return to go to the next step in the tutorial.";
 				handController.StopRecording();
 				handController.DestroyAllHands();
 				handController.gameObject.SetActive(false);
@@ -66,16 +68,18 @@ public class TutorialHelper : MonoBehaviour {
 				text = "Use your ";
 				text += Convert.ToBoolean(PlayerPrefs.GetInt("Leftie"))? "right" : "left";
 				text += " hand to aim";
+				text += "\n you should see a red dot appearing if you try it. This is where you aim at.";
 				handController.LoadNewRecording(Resources.Load<TextAsset>("Recordings/aim"));
 				handController.gameObject.SetActive(true);
 				handController.PlayRecording();
 				break;
 			case TutorialState.Spell:
-				text = "While aiming, \n";
+				text = "While aiming,\n";
 				text += "Use your ";
 				text += Convert.ToBoolean(PlayerPrefs.GetInt("Leftie")) ? "left" : "right";
 				text += " hand to cast spells";
-				text += "\n Press return to start learning spells";
+				text += "\nPlease try it out! It works if you see the correct spell appearing on the spot you aimed.";
+				text += "\nPress return to start learning spells";
 				handController.DestroyAllHands();				
 				handController.StopRecording();
 				handController.gameObject.SetActive(false);
@@ -104,9 +108,15 @@ public class TutorialHelper : MonoBehaviour {
 			case TutorialState.Finished:
 				handController.StopRecording();
 				handController.gameObject.SetActive(false);
-				text = "That's it! Get ready to play!";
+				text = "That's it! Press Return to start playing!";
 				break;
 		}
-		guiText.text = text;
+		textObject.text = text;
+	}
+
+	void End()
+	{
+		PlayerPrefs.SetInt("CompletedTutorial", 1);
+		GameManager.instance.StartPreparation();
 	}
 }

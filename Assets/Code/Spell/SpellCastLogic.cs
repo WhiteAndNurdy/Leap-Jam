@@ -54,6 +54,7 @@ public class SpellCastLogic : MonoBehaviour
 		m_LeapController = new Controller();
 		m_SpellCastLogic = gameObject.GetComponent<SpellCastLogic>();
 		m_AimIndicator = GameObject.FindGameObjectWithTag("AimIndicator");
+		InverseControls = Convert.ToBoolean(PlayerPrefs.GetInt("Leftie"));
 	}
 
 	// Use this for initialization
